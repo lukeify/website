@@ -1,0 +1,20 @@
+#cloud-config
+# vim: syntax=yaml
+
+# Arrive at a maximally up-to-date system state
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+
+# Install the following packages on first boot.
+packages:
+  - nginx
+
+timezone: Etc/UTC
+
+runcmd:
+  # https://www.linode.com/docs/guides/manage-users-with-cloud-init/#disable-root-user
+  - sed -i '/PermitRootLogin/d' /etc/ssh/sshd_config
+  - echo "PermitRootLogin no" >> /etc/ssh/sshd_config true
+  - systemctl restart sshd
+
