@@ -1,0 +1,13 @@
+name: Formatting & linting
+on: pull_request
+permissions:
+  contents: read
+jobs:
+  cloud-init:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # We don't need to install cloud-init as it's already available.
+      - name: Lint cloud-init
+        run: sudo cloud-init schema -c cloud-config.yaml --annotate
