@@ -12,9 +12,22 @@ packages:
 
 timezone: Etc/UTC
 
+groups:
+  - cloud-users
+
+users:
+  - name: luke
+    gecos: Luke
+    shell: /bin/bash
+    groups: [sudo, admin, cloud-users]
+    # Disable password login.
+    lock_passwd: true
+    chpasswd: { expire: true }
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE46x4l8eJC7MOkf0n0GIe0HR37l8SDLgfKtJSrWGuf9 LukesEd22519SSHKey
+
 runcmd:
   # https://www.linode.com/docs/guides/manage-users-with-cloud-init/#disable-root-user
   - sed -i '/PermitRootLogin/d' /etc/ssh/sshd_config
-  - echo "PermitRootLogin no" >> /etc/ssh/sshd_config true
+  - echo "PermitRootLogin no" >> /etc/ssh/sshd_config
   - systemctl restart sshd
-
