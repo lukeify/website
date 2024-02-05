@@ -79,3 +79,50 @@ body {
 strong {
     font-weight: 500;
 }
+
+.headline {
+    margin-inline-start: 1.25em;
+}
+
+.emoji-container {
+    position: relative;
+    left: -1.25em;
+}
+
+@keyframes transition-in {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 100%;
+    }
+}
+
+@keyframes transition-out {
+    from {
+        transform: translateY(0);
+        opacity: 100%;
+    }
+    80% {
+        opacity: 0;
+    }
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+.emoji {
+    position: absolute;
+    transform: translateY(-100%);
+    animation: transition-in 800ms cubic-bezier(.6,1.64,.8,1) forwards;
+}
+
+.emoji--transitioning-out {
+    animation: transition-out 1200ms cubic-bezier(0.5, 1, 0.33, 1) forwards;
+}

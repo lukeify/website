@@ -4,10 +4,38 @@
     <title>luke.kiwi 🥝</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const emojiContainerEl = document.querySelector('.emoji-container');
+
+            const validEmojis = ['👋', '🪂', '👟', '🥝', '👨‍💻', '😛'];
+            let emojiPick = 0;
+
+            setInterval(() => {
+                // Reset
+                if (emojiPick >= validEmojis.length - 1) emojiPick = -1;
+
+                const nextEmojiEl = document.createElement('span');
+                nextEmojiEl.classList.add('emoji');
+                nextEmojiEl.textContent = validEmojis[++emojiPick];
+                emojiContainerEl.prepend(nextEmojiEl);
+
+                if (emojiContainerEl.children.length > 1) {
+                    emojiContainerEl.lastChild.classList.add('emoji--transitioning-out');
+
+                    setTimeout(() => {
+                        emojiContainerEl.lastChild.remove();
+                    }, 1200);
+                }
+            }, 5000);
+        });
+    </script>
 </head>
 <body>
     <!-- Above the fold -->
-    <h1 class="headline">👋 Hello!</h1>
+    <h1 class="headline">
+        <span class="emoji-container"><span class="emoji">👋</span></span> Hello!
+    </h1>
     <p>I'm <strong>Luke</strong>—a software engineer living in 📍 <a href="https://maps.apple.com/?address=Central%20Otago%20District,%20New%20Zealand">Central Otago, New Zealand</a>.</p>
     <p>Currently, I'm a Senior Rails Developer at <a href="https://ackama.com">Ackama</a>; and also run a small business, Bluewing.</p>
     <p>I don't maintain a strong internet presence, but you can see the things I work on, connect—or just send me a message to paragliding together!—use the links below.</p>
