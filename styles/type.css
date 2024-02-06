@@ -1,0 +1,44 @@
+@font-face {
+    font-family: 'Neue Haas Grotesk Display';
+    font-display: auto;
+    font-weight: 200;
+    src: local('Neue Haas Grotesk Display Light'),
+    url('../typefaces/woff/NeueHaasGroteskDisplay-Light.woff') format('woff'),
+    url('../typefaces/otf/NeueHaasGroteskDisplay-Light.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Neue Haas Grotesk Display';
+    font-display: auto;
+    font-weight: 300;
+    src: local('Neue Haas Grotesk Display SemiLight'),
+    url('../typefaces/woff/NeueHaasGroteskDisplay-SemLt.woff') format('woff'),
+    url('../typefaces/otf/NeueHaasGroteskDisplay-SemLt.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Neue Haas Grotesk Display';
+    font-display: auto;
+    font-weight: 400;
+    src: local('Neue Haas Grotesk Display Regular'),
+    url('../typefaces/woff/NeueHaasGroteskDisplay-Reg.woff') format('woff'),
+    url('../typefaces/otf/NeueHaasGroteskDisplay-Reg.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Neue Haas Grotesk Display';
+    font-display: auto;
+    font-weight: 500;
+    src: local('Neue Haas Grotesk Display Medium'),
+    url('../typefaces/woff/NeueHaasGroteskDisplay-Medium.woff') format('woff'),
+    url('../typefaces/otf/NeueHaasGroteskDisplay-Medium.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Neue Haas Grotesk Display';
+    font-display: auto;
+    font-weight: 600;
+    src: local('Neue Haas Grotesk Display Bold'),
+    url('../typefaces/woff/NeueHaasGroteskDisplay-Bold.woff') format('woff'),
+    url('../typefaces/otf/NeueHaasGroteskDisplay-Bold.otf') format('opentype');
+}
