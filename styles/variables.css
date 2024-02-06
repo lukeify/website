@@ -1,0 +1,9 @@
+:root {
+    --primary-text--light-appearance: hsl(0deg 0% 20%);
+    --primary-bg--light-appearance: hsl(0deg 100% 100%);
+
+    --primary-typeface: 'Neue Haas Grotesk Display';
+
+    --content-width: 36em;
+    --content-pull-up: -5vh;
+}

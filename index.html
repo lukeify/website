@@ -3,14 +3,45 @@
 <head>
     <title>luke.kiwi 🥝</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/type.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/components/emoji.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const transitionSpeed = 5000;
+            const fadeOutDuration = 1200;
+            const emojiContainerEl = document.querySelector('.emoji-container');
+
+            const emojiArray = ['👋', '🪂', '👟', '🥝', '👨‍💻', '😛'];
+            let idx = 0;
+
+            setInterval(() => {
+                if (idx >= emojiArray.length - 1) idx = -1;
+
+                const nextEmojiEl = document.createElement('span');
+                nextEmojiEl.classList.add('emoji');
+                nextEmojiEl.textContent = emojiArray[++idx];
+                emojiContainerEl.prepend(nextEmojiEl);
+
+                if (emojiContainerEl.children.length > 1) {
+                    emojiContainerEl.lastChild.classList.add('emoji--transitioning-out');
+                    setTimeout(() => emojiContainerEl.lastChild.remove(), fadeOutDuration);
+                }
+            }, transitionSpeed);
+        });
+    </script>
 </head>
 <body>
     <!-- Above the fold -->
-    <h1 class="headline">👋 Hello!</h1>
-    <p>I'm <strong>Luke</strong>—a software engineer who resides in Central Otago, New Zealand.</p>
+    <h1 class="headline">
+        <span class="emoji-container"><span class="emoji">👋</span></span> Hello!
+    </h1>
+    <p>I'm <strong>Luke</strong>—a software engineer living in 📍 <a href="https://maps.apple.com/?address=Central%20Otago%20District,%20New%20Zealand">Central Otago, New Zealand</a>.</p>
     <p>Currently, I'm a Senior Rails Developer at <a href="https://ackama.com">Ackama</a>; and also run a small business, Bluewing.</p>
-    <p>I don't maintain a strong internet presence, but you can see the things I work on, connect with me—or go paragliding together!—use the links below.</p>
+    <p>I don't maintain a strong internet presence, but you can see the things I work on, connect—or just send me a message if you'd like to go paragliding together!—use the links below.</p>
 
     <ul>
         <li>GitHub: <a href="https://github.com/lukeify">lukeify</a></li>

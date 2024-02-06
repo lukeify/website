@@ -1,0 +1,4 @@
+.headline {
+    /* Introduce some margin such that emojis are positioned naturally to the headline text. */
+    margin-inline-start: 1.25em;
+}
