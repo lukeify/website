@@ -8,7 +8,7 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
 .soa__wrapper {
     /* PARAMETRIC VARS */
     /* TODO: Define the shadow and glimmer angles as _central angles_, not as starting angles */
-    --sticker-diffuse-shadow-color: rgb(20 20 40 / 0.3);
+    --sticker-diffuse-shadow-color: rgb(20 20 40 / 0.1);
     --sticker-diffuse-shadow-size: 3rem;
     --sticker-sharp-shadow-color: rgb(20 20 40 / 0.2);
     --sticker-sharp-shadow-size: calc(1rem / 3);
@@ -17,10 +17,14 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     --sticker-background: rgb(216 217 225 / 1);
     --sticker-size: 15em;
 
-    --stamp-outline-width: 20px;
+    --stamp-outline-width: 1.25em;
     --stamp-outline-color: hsl(0deg 0% 98% / 1);
 
     --ring-size: 1.5;
+
+    --text-inset-distance: 2.8em;
+    --text-color: hsl(0deg 0% 15% / 1);
+
 
     --shadow-color: hsl(215deg 8% 28% / 1);
     --shadow-starting-angle: 45deg;
@@ -63,6 +67,18 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     z-index: 1000;
     border: var(--stamp-outline-width) solid var(--stamp-outline-color);
     border-radius: 50%;
+}
+
+.soa__authenticity-text-svg {
+    width: calc(var(--sticker-size) - var(--text-inset-distance));
+    z-index: 1000;
+}
+
+.soa__authenticity-text {
+    letter-spacing: 2px;
+    font-size: 0.5rem;
+    font-weight: 500;
+    fill: var(--text-color);
 }
 
 .soa__ray {
