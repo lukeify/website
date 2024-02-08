@@ -5,62 +5,99 @@ Brushed metal toggle: https://codepen.io/iliadraznin/pen/AYQGKj
 Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
  */
 
+.soa__wrapper {
+    /* PARAMETRIC VARS */
+    /* TODO: Define the shadow and glimmer angles as _central angles_, not as starting angles */
+    --sticker-diffuse-shadow-color: rgb(20 20 40 / 0.3);
+    --sticker-diffuse-shadow-size: 3rem;
+    --sticker-sharp-shadow-color: rgb(20 20 40 / 0.2);
+    --sticker-sharp-shadow-size: calc(1rem / 3);
+    --sticker-sharp-shadow-offset: 0 0;
 
-.sticker-of-authenticity {
-    --sticker-background: rgb(216, 217, 225);
-    --sticker-size: 10em;
+    --sticker-background: rgb(216 217 225 / 1);
+    --sticker-size: 15em;
+
+    --stamp-outline-width: 20px;
+    --stamp-outline-color: hsl(0deg 0% 98% / 1);
+
     --ring-size: 1.5;
 
-    --steel-shadow: #41464d;
-    --steel-glimmer: #f3f3ff;
+    --shadow-color: hsl(215deg 8% 28% / 1);
+    --shadow-starting-angle: 45deg;
+    --shadow-angular-width: 80deg;
+    --shadow-umbra-width: 20deg;
 
+    --glimmer-color: hsl(240deg 100% 98% / 1);
+    --glimmer-angular-width: 0;
+    --glimmer-umbra-width: 0;
+
+    /* COMPUTED VARS */
+    --shadow-opposite-angle: calc(var(--shadow-starting-angle) + (pi * 1rad));
+    --shadow-umbra-start-angle: calc((var(--shadow-angular-width) / 2) - (var(--shadow-umbra-width) / 2));
+    --shadow-umbra-end-angle: calc((var(--shadow-angular-width) / 2) + (var(--shadow-umbra-width) / 2));
+
+    --glimmer-starting-angle: calc(var(--shadow-starting-angle) - ((pi * 1rad) / 3));
+    --glimmer-opposite-angle: calc(var(--glimmer-starting-angle) + (pi * 1rad));
+
+    filter: drop-shadow(2px 2px var(--sticker-diffuse-shadow-size) var(--sticker-diffuse-shadow-color)) drop-shadow(var(--sticker-sharp-shadow-offset) var(--sticker-sharp-shadow-size) var(--sticker-sharp-shadow-color));
+}
+
+.soa {
     width: var(--sticker-size);
     height: var(--sticker-size);
-    position: fixed;
-    bottom: 5em;
-    right: 5em;
     border-radius: 50%;
+    margin-inline: auto;
     background-color: var(--sticker-background);
     overflow: hidden;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
     display: flex;
     justify-content: center;
     align-items: center;
+    clip-path: url(#sticker-outline);
 }
 
-.ray {
+.soa::before {
+    content:"";
+    position: absolute;
+    width: var(--sticker-size);
+    height: var(--sticker-size);
+    z-index: 1000;
+    border: var(--stamp-outline-width) solid var(--stamp-outline-color);
+    border-radius: 50%;
+}
+
+.soa__ray {
     position: absolute;
     border-radius: 50%;
 }
 
-/*.ray--sharp-from-center {*/
-/*    width: var(--sticker-size);*/
-/*    height: var(--sticker-size);*/
-/*    background:*/
-/*            radial-gradient(closest-side, rgba(216, 217, 225, 0.5), var(--sticker-background) 50%),*/
-/*            !* DARK STRAKE ONE *!*/
-/*            conic-gradient(from 60deg, var(--steel-shadow), var(--steel-shadow) 45deg, transparent 45deg),*/
-/*            !* DARK STRAKE ONE OPPOSITE *!*/
-/*            conic-gradient(from 240deg, var(--steel-shadow), var(--steel-shadow) 45deg, transparent 45deg),*/
-/*            !* LIGHT STRAKE ONE *!*/
-/*            conic-gradient(from 350deg, var(--steel-glimmer), var(--steel-glimmer) 20deg, transparent 20deg),*/
-/*            !* LIGHT STRAKE ONE OPPOSITE *!*/
-/*            conic-gradient(from 170deg, var(--steel-glimmer), var(--steel-glimmer) 20deg, transparent 20deg);*/
-/*}*/
+.soa__ray--sharp-from-center {
+    width: var(--sticker-size);
+    height: var(--sticker-size);
+    background:
+            radial-gradient(closest-side, rgba(216, 217, 225, 0.5), var(--sticker-background) 50%),
+            /* DARK STRAKE ONE */
+            conic-gradient(from var(--shadow-starting-angle), var(--shadow-color), var(--shadow-color) var(--shadow-angular-width), transparent var(--shadow-angular-width)),
+            /* DARK STRAKE ONE OPPOSITE */
+            conic-gradient(from var(--shadow-opposite-angle), var(--shadow-color), var(--shadow-color) var(--shadow-angular-width), transparent var(--shadow-angular-width)),
+            /* LIGHT STRAKE ONE */
+            conic-gradient(from var(--glimmer-starting-angle), var(--glimmer-color), var(--glimmer-color) 20deg, transparent 20deg),
+            /* LIGHT STRAKE ONE OPPOSITE */
+            conic-gradient(from var(--glimmer-opposite-angle), var(--glimmer-color), var(--glimmer-color) 20deg, transparent 20deg);
+}
 
-.ray--diffuse-from-edge {
+.soa__ray--diffuse-from-edge {
     width: var(--sticker-size);
     height: var(--sticker-size);
     background:
             radial-gradient(closest-side, var(--sticker-background) 0%, transparent 100%),
             /* SHADOW */
-            conic-gradient(from 60deg, transparent, var(--steel-shadow) 20deg, var(--steel-shadow) 30deg, transparent 50deg),
+            conic-gradient(from var(--shadow-starting-angle), transparent, var(--shadow-color) var(--shadow-umbra-start-angle), var(--shadow-color) var(--shadow-umbra-end-angle), transparent var(--shadow-angular-width)),
             /* SHADOW OPPOSITE */
-            conic-gradient(from 240deg, transparent, var(--steel-shadow) 20deg, var(--steel-shadow) 30deg, transparent 50deg),
+            conic-gradient(from var(--shadow-opposite-angle), transparent, var(--shadow-color) var(--shadow-umbra-start-angle), var(--shadow-color) var(--shadow-umbra-end-angle), transparent var(--shadow-angular-width)),
             /* GLIMMER */
-            conic-gradient(from 350deg, transparent, var(--steel-glimmer) 5deg, var(--steel-glimmer) 10deg, transparent 15deg),
+            conic-gradient(from var(--glimmer-starting-angle), transparent, var(--glimmer-color) 5deg, var(--glimmer-color) 10deg, transparent 15deg),
             /* GLIMMER OPPOSITE */
-            conic-gradient(from 170deg, transparent, var(--steel-glimmer) 5deg, var(--steel-glimmer) 10deg, transparent 15deg);
+            conic-gradient(from var(--glimmer-opposite-angle), transparent, var(--glimmer-color) 5deg, var(--glimmer-color) 10deg, transparent 15deg);
     filter: blur(1px);
 }
 
