@@ -25,6 +25,10 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     --text-inset-distance: 2.8em;
     --text-color: hsl(0deg 0% 15% / 1);
 
+    --light-sweep-width: 3em;
+    --light-sweep-angle: 20deg;
+    --light-sweep-peak-opaqueness: 0.8;
+    --light-sweep-animation-duration: 900ms;
 
     --shadow-color: hsl(215deg 8% 28% / 1);
     --shadow-starting-angle: 45deg;
@@ -67,6 +71,35 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     z-index: 1000;
     border: var(--stamp-outline-width) solid var(--stamp-outline-color);
     border-radius: 50%;
+}
+
+@keyframes light-sweep {
+    from {
+        left: 0;
+        opacity: 20%;
+    }
+
+    50% {
+        opacity: var(--light-sweep-peak-opaqueness);
+    }
+
+    to {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+.soa:hover::after {
+    content:"";
+    position: absolute;
+    width: var(--light-sweep-width);
+    background-color: hsl(0deg 100% 100% / 0.6);
+    top: 0;
+    bottom: 0;
+    display: block;
+    z-index: 1000;
+    transform: rotate(var(--light-sweep-angle));
+    animation: ease-in var(--light-sweep-animation-duration) light-sweep forwards;
 }
 
 .soa__authenticity-text-svg {
