@@ -57,6 +57,14 @@
             }
         };
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const soa = document.querySelector('.soa__permission');
+            soa.addEventListener('click', () => {
+                DeviceMotionEvent.requestPermission().then(() => {}).catch(console.error);
+            });
+        });
+    </script>
 </head>
 <body>
 <svg width="0" height="0">
@@ -79,6 +87,9 @@
         <li>GitHub: <a href="https://github.com/lukeify">lukeify</a></li>
     </ul>
 
+<button class="soa__permission">
+    Request permission
+</button>
     <div class="soa__wrapper">
         <div class="soa">
             <svg class="soa__authenticity-text-svg" viewBox="0 0 100 100">
