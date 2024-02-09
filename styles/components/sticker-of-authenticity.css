@@ -59,6 +59,24 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     --light-sweep-animation-duration: 900ms;
 
     /**
+    How strong, sensitive, and frequent the machining marks are within the sticker.
+     */
+    --machining-high-frequency-groove-color: hsl(0deg 0% 20% / 0.1);
+    --machining-high-frequency-groove-gap: 2px;
+    --machining-high-frequency-groove-peak: 0px;
+    --machining-high-frequency-groove-end: 1px;
+
+    --machining-low-frequency-groove-color: hsl(0deg 0% 20% / 0.08);
+    --machining-low-frequency-groove-gap: 14px;
+    --machining-low-frequency-groove-peak: 2px;
+    --machining-low-frequency-groove-end: 1px;
+
+    --machining-mid-frequency-shine-color: hsl(0deg 100% 100% / 0.5);
+    --machining-mid-frequency-shine-gap: 5px;
+    --machining-mid-frequency-shine-peak: 0px;
+    --machining-mid-frequency-shine-end: 2px;
+
+    /**
     Defines how sharp the anisotropic effects are at the centre of the sticker (0 for sharp, 1 for blurred).
      */
     --anisotropic-sharpness-at-center: 0.5;
@@ -80,11 +98,20 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     /**
     As above, but for the brighter anisotropic reflection.
      */
-    --anisotropic-reflection-color: hsl(240deg 100% 98% / 1);
+    --anisotropic-reflection-color: hsl(240deg 100% 99% / 1);
     --anisotropic-reflection-umbra-angular-width: 10deg;
     --anisotropic-reflection-penumbra-angular-width: 20deg;
 
     /* COMPUTED CUSTOM PROPERTIES */
+    --machining-high-frequency-groove-peak-position: calc(var(--machining-high-frequency-groove-gap) + var(--machining-high-frequency-groove-peak));
+    --machining-high-frequency-groove-end-position: calc(var(--machining-high-frequency-groove-peak-position) + var(--machining-high-frequency-groove-end));
+
+    --machining-low-frequency-groove-peak-position: calc(var(--machining-low-frequency-groove-gap) + var(--machining-low-frequency-groove-peak));
+    --machining-low-frequency-groove-end-position: calc(var(--machining-low-frequency-groove-peak-position) + var(--machining-low-frequency-groove-end));
+
+    --machining-mid-frequency-shine-peak-position: calc(var(--machining-mid-frequency-shine-gap) + var(--machining-mid-frequency-shine-peak));
+    --machining-mid-frequency-shine-end-position: calc(var(--machining-mid-frequency-shine-peak-position) + var(--machining-mid-frequency-shine-end));
+
     --anisotropic-absorption-starting-angle: calc(var(--anisotropic-absorption-peak-angle) - (var(--anisotropic-absorption-penumbra-angular-width) / 2));
     --anisotropic-absorption-opposing-starting-angle: calc(var(--anisotropic-absorption-starting-angle) + (pi * 1rad));
     --anisotropic-absorption-umbra-start-angle: calc((var(--anisotropic-absorption-penumbra-angular-width) / 2) - (var(--anisotropic-absorption-umbra-angular-width) / 2));
@@ -165,14 +192,14 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     fill: var(--text-color);
 }
 
-.soa__anisotropy {
+.soa__anisotropy, .soa__radial-machining {
     position: absolute;
     border-radius: 50%;
+    width: var(--sticker-size);
+    height: var(--sticker-size);
 }
 
 .soa__anisotropy--sharp-from-center {
-    width: var(--sticker-size);
-    height: var(--sticker-size);
     background:
         radial-gradient(
             closest-side,
@@ -206,8 +233,6 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
 }
 
 .soa__anisotropy--diffuse-from-edge {
-    width: var(--sticker-size);
-    height: var(--sticker-size);
     background:
         radial-gradient(
             closest-side,
@@ -243,6 +268,30 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
             transparent var(--anisotropic-reflection-penumbra-angular-width)
         );
     filter: blur(1px);
+}
+
+.soa__radial-machining {
+    background: repeating-radial-gradient(
+        circle at center,
+        transparent,
+        transparent var(--machining-high-frequency-groove-gap),
+        var(--machining-high-frequency-groove-color) var(--machining-high-frequency-groove-peak-position),
+        transparent var(--machining-high-frequency-groove-end-position)
+    ),
+    repeating-radial-gradient(
+        circle at center,
+        transparent,
+        transparent var(--machining-low-frequency-groove-gap),
+        var(--machining-low-frequency-groove-color) var(--machining-low-frequency-groove-peak-position),
+        transparent var(--machining-low-frequency-groove-end-position)
+    ),
+    repeating-radial-gradient(
+        circle at center,
+        transparent,
+        transparent var(--machining-mid-frequency-shine-gap),
+        var(--machining-mid-frequency-shine-color) var(--machining-mid-frequency-shine-peak-position),
+        transparent var(--machining-mid-frequency-shine-end-position)
+    );
 }
 
 /*.ring {*/
