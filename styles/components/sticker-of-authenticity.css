@@ -6,48 +6,99 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
  */
 
 .soa__wrapper {
-    /* PARAMETRIC VARS */
-    /* TODO: Define the shadow and glimmer angles as _central angles_, not as starting angles */
-    --sticker-diffuse-shadow-color: rgb(20 20 40 / 0.1);
-    --sticker-diffuse-shadow-size: 3rem;
-    --sticker-sharp-shadow-color: rgb(20 20 40 / 0.2);
+    /* PARAMETRIC CUSTOM PROPERTIES */
+
+    /**
+    The characteristics of the diffuse shadow around the sticker.
+    This is primarily to ensure both the sticker outline can be completely white while still maintaining contrast against the page background.
+     */
+    --sticker-diffuse-shadow-color: hsl(240deg 33.3% 11.8% / 0.1);
+    --sticker-diffuse-shadow-size: 2rem;
+    --sticker-diffuse-shadow-offset: 2px 2px;
+
+    /**
+    The characteristics of the sharp shadow immediately around the edges of the sticker.
+    This makes the wavy SVG boundary more visible.
+     */
+    --sticker-sharp-shadow-color: hsl(240deg 33.3% 11.8% / 0.3);
     --sticker-sharp-shadow-size: calc(1rem / 3);
     --sticker-sharp-shadow-offset: 0 0;
 
-    --sticker-background: rgb(216 217 225 / 1);
+    /**
+    Size and colour information concerning the sticker itself.
+     */
+    --sticker-background-h: 233deg;
+    --sticker-background-s: 13%;
+    --sticker-background-l: 86.5%;
+    --sticker-background: hsl(var(--sticker-background-h) var(--sticker-background-s) var(--sticker-background-l));
     --sticker-size: 15em;
 
-    --stamp-outline-width: 1.25em;
-    --stamp-outline-color: hsl(0deg 0% 98% / 1);
+    /**
+    The size and color of the outline at the edge of the sticker.
+     */
+    --sticker-outline-width: 1.25em;
+    --sticker-outline-color: hsl(0deg 0% 98% / 1);
 
+    /**
+    TODO: Should this be kept?
+     */
     --ring-size: 1.5;
 
+    /**
+    For inset text within the sticker, this determines its placement from the edge, and the color of the text itself.
+     */
     --text-inset-distance: 2.8em;
     --text-color: hsl(0deg 0% 15% / 1);
 
+    /**
+    When hovering over the sticker, we generate a bar of light that sweeps over it for funsies.
+     */
     --light-sweep-width: 3em;
     --light-sweep-angle: 20deg;
     --light-sweep-peak-opaqueness: 0.8;
     --light-sweep-animation-duration: 900ms;
 
-    --shadow-color: hsl(215deg 8% 28% / 1);
-    --shadow-starting-angle: 45deg;
-    --shadow-angular-width: 80deg;
-    --shadow-umbra-width: 20deg;
+    /**
+    Defines how sharp the anisotropic effects are at the centre of the sticker (0 for sharp, 1 for blurred).
+     */
+    --anisotropic-sharpness-at-center: 0.5;
 
-    --glimmer-color: hsl(240deg 100% 98% / 1);
-    --glimmer-angular-width: 0;
-    --glimmer-umbra-width: 0;
+    /**
+     Currently defines the entire positioning of all anisotropic effects on the sticker. This is the angle, measured
+     clockwise, at which the peak absorption effects of the anisotropy are present.
+     */
+    --anisotropic-absorption-peak-angle: 60deg;
 
-    /* COMPUTED VARS */
-    --shadow-opposite-angle: calc(var(--shadow-starting-angle) + (pi * 1rad));
-    --shadow-umbra-start-angle: calc((var(--shadow-angular-width) / 2) - (var(--shadow-umbra-width) / 2));
-    --shadow-umbra-end-angle: calc((var(--shadow-angular-width) / 2) + (var(--shadow-umbra-width) / 2));
+    /**
+    Defines the characteristics of the anisotropic absorption of light on the sticker, including the width of the
+    entire effect (the penumbra), and the width of the full intensity of the effect (the umbra).
+     */
+    --anisotropic-absorption-color: hsl(215deg 8% 28% / 1);
+    --anisotropic-absorption-umbra-angular-width: 20deg;
+    --anisotropic-absorption-penumbra-angular-width: 80deg;
 
-    --glimmer-starting-angle: calc(var(--shadow-starting-angle) - ((pi * 1rad) / 3));
-    --glimmer-opposite-angle: calc(var(--glimmer-starting-angle) + (pi * 1rad));
+    /**
+    As above, but for the brighter anisotropic reflection.
+     */
+    --anisotropic-reflection-color: hsl(240deg 100% 98% / 1);
+    --anisotropic-reflection-umbra-angular-width: 10deg;
+    --anisotropic-reflection-penumbra-angular-width: 20deg;
 
-    filter: drop-shadow(2px 2px var(--sticker-diffuse-shadow-size) var(--sticker-diffuse-shadow-color)) drop-shadow(var(--sticker-sharp-shadow-offset) var(--sticker-sharp-shadow-size) var(--sticker-sharp-shadow-color));
+    /* COMPUTED CUSTOM PROPERTIES */
+    --anisotropic-absorption-starting-angle: calc(var(--anisotropic-absorption-peak-angle) - (var(--anisotropic-absorption-penumbra-angular-width) / 2));
+    --anisotropic-absorption-opposing-starting-angle: calc(var(--anisotropic-absorption-starting-angle) + (pi * 1rad));
+    --anisotropic-absorption-umbra-start-angle: calc((var(--anisotropic-absorption-penumbra-angular-width) / 2) - (var(--anisotropic-absorption-umbra-angular-width) / 2));
+    --anisotropic-absorption-umbra-end-angle: calc((var(--anisotropic-absorption-penumbra-angular-width) / 2) + (var(--anisotropic-absorption-umbra-angular-width) / 2));
+
+    --anisotropic-reflection-peak-angle: calc(var(--anisotropic-absorption-peak-angle) - ((pi * 1rad) / 2));
+    --anisotropic-reflection-starting-angle: calc(var(--anisotropic-reflection-peak-angle) - (var(--anisotropic-reflection-penumbra-angular-width) / 2));
+    --anisotropic-reflection-opposing-starting-angle: calc(var(--anisotropic-reflection-starting-angle) + (pi * 1rad));
+    --anisotropic-reflection-umbra-start-angle: calc((var(--anisotropic-reflection-penumbra-angular-width) / 2) - (var(--anisotropic-reflection-umbra-angular-width) / 2));
+    --anisotropic-reflection-umbra-end-angle: calc((var(--anisotropic-reflection-penumbra-angular-width) / 2) + (var(--anisotropic-reflection-umbra-angular-width) / 2));
+
+    filter:
+        drop-shadow(var(--sticker-diffuse-shadow-offset) var(--sticker-diffuse-shadow-size) var(--sticker-diffuse-shadow-color))
+        drop-shadow(var(--sticker-sharp-shadow-offset) var(--sticker-sharp-shadow-size) var(--sticker-sharp-shadow-color));
 }
 
 .soa {
@@ -69,7 +120,7 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     width: var(--sticker-size);
     height: var(--sticker-size);
     z-index: 1000;
-    border: var(--stamp-outline-width) solid var(--stamp-outline-color);
+    border: var(--sticker-outline-width) solid var(--sticker-outline-color);
     border-radius: 50%;
 }
 
@@ -114,39 +165,83 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     fill: var(--text-color);
 }
 
-.soa__ray {
+.soa__anisotropy {
     position: absolute;
     border-radius: 50%;
 }
 
-.soa__ray--sharp-from-center {
+.soa__anisotropy--sharp-from-center {
     width: var(--sticker-size);
     height: var(--sticker-size);
     background:
-            radial-gradient(closest-side, rgba(216, 217, 225, 0.5), var(--sticker-background) 50%),
-            /* DARK STRAKE ONE */
-            conic-gradient(from var(--shadow-starting-angle), var(--shadow-color), var(--shadow-color) var(--shadow-angular-width), transparent var(--shadow-angular-width)),
-            /* DARK STRAKE ONE OPPOSITE */
-            conic-gradient(from var(--shadow-opposite-angle), var(--shadow-color), var(--shadow-color) var(--shadow-angular-width), transparent var(--shadow-angular-width)),
-            /* LIGHT STRAKE ONE */
-            conic-gradient(from var(--glimmer-starting-angle), var(--glimmer-color), var(--glimmer-color) 20deg, transparent 20deg),
-            /* LIGHT STRAKE ONE OPPOSITE */
-            conic-gradient(from var(--glimmer-opposite-angle), var(--glimmer-color), var(--glimmer-color) 20deg, transparent 20deg);
+        radial-gradient(
+            closest-side,
+            hsl(var(--sticker-background-h) var(--sticker-background-s) var(--sticker-background-l) / var(--anisotropic-sharpness-at-center)),
+            var(--sticker-background) 50%
+        ),
+        conic-gradient(
+            from var(--anisotropic-absorption-starting-angle),
+            var(--anisotropic-absorption-color),
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-penumbra-angular-width),
+            transparent var(--anisotropic-absorption-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-absorption-opposing-starting-angle),
+            var(--anisotropic-absorption-color),
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-penumbra-angular-width),
+            transparent var(--anisotropic-absorption-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-reflection-starting-angle),
+            var(--anisotropic-reflection-color),
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-penumbra-angular-width),
+            transparent var(--anisotropic-reflection-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-reflection-opposing-starting-angle),
+            var(--anisotropic-reflection-color),
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-penumbra-angular-width),
+            transparent var(--anisotropic-reflection-penumbra-angular-width)
+        );
 }
 
-.soa__ray--diffuse-from-edge {
+.soa__anisotropy--diffuse-from-edge {
     width: var(--sticker-size);
     height: var(--sticker-size);
     background:
-            radial-gradient(closest-side, var(--sticker-background) 0%, transparent 100%),
-            /* SHADOW */
-            conic-gradient(from var(--shadow-starting-angle), transparent, var(--shadow-color) var(--shadow-umbra-start-angle), var(--shadow-color) var(--shadow-umbra-end-angle), transparent var(--shadow-angular-width)),
-            /* SHADOW OPPOSITE */
-            conic-gradient(from var(--shadow-opposite-angle), transparent, var(--shadow-color) var(--shadow-umbra-start-angle), var(--shadow-color) var(--shadow-umbra-end-angle), transparent var(--shadow-angular-width)),
-            /* GLIMMER */
-            conic-gradient(from var(--glimmer-starting-angle), transparent, var(--glimmer-color) 5deg, var(--glimmer-color) 10deg, transparent 15deg),
-            /* GLIMMER OPPOSITE */
-            conic-gradient(from var(--glimmer-opposite-angle), transparent, var(--glimmer-color) 5deg, var(--glimmer-color) 10deg, transparent 15deg);
+        radial-gradient(
+            closest-side,
+            var(--sticker-background) 0%,
+            transparent 100%
+        ),
+        conic-gradient(
+            from var(--anisotropic-absorption-starting-angle),
+            transparent,
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-umbra-start-angle),
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-umbra-end-angle),
+            transparent var(--anisotropic-absorption-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-absorption-opposing-starting-angle),
+            transparent,
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-umbra-start-angle),
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-umbra-end-angle),
+            transparent var(--anisotropic-absorption-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-reflection-starting-angle),
+            transparent,
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-umbra-start-angle),
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-umbra-end-angle),
+            transparent var(--anisotropic-reflection-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-reflection-opposing-starting-angle),
+            transparent,
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-umbra-start-angle),
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-umbra-end-angle),
+            transparent var(--anisotropic-reflection-penumbra-angular-width)
+        );
     filter: blur(1px);
 }
 
