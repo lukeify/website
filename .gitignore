@@ -1,3 +1,4 @@
 .gitignored/
 typefaces/
 .idea/
+node_modules/
