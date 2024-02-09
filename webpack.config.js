@@ -7,12 +7,11 @@ module.exports = {
     },
     devServer: {
         server: 'https',
-        hot: true,
         static: {
-          directory: path.resolve(__dirname), // Path to your public directory
+          directory: path.resolve(__dirname),
         },
-        port: 8080, // Port number
-        open: true, // Open the browser when server starts
+        port: 8080,
+        open: true,
     },
     plugins: [new HtmlWebpackPlugin({
         template: 'index.html'
