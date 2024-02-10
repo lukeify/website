@@ -10,28 +10,51 @@
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/components/emoji.css">
     <script>
+        let isRunningAnimation = false;
+        let idx = 0;
+        let intervalId = null;
+
+        document.addEventListener('visibilitychange', () => document.hidden ? cancelEmojiAnimation() : runEmojiAnimation());
+        window.addEventListener('blur', () => cancelEmojiAnimation());
+        window.addEventListener('focus', () => runEmojiAnimation());
         document.addEventListener('DOMContentLoaded', () => {
-            const transitionSpeed = 5000;
-            const fadeOutDuration = 1200;
-            const emojiContainerEl = document.querySelector('.emoji-container');
-
-            const emojiArray = ['👋', '🪂', '👟', '🥝', '👨‍💻', '😛'];
-            let idx = 0;
-
-            setInterval(() => {
-                if (idx >= emojiArray.length - 1) idx = -1;
-
-                const nextEmojiEl = document.createElement('span');
-                nextEmojiEl.classList.add('emoji');
-                nextEmojiEl.textContent = emojiArray[++idx];
-                emojiContainerEl.prepend(nextEmojiEl);
-
-                if (emojiContainerEl.children.length > 1) {
-                    emojiContainerEl.lastChild.classList.add('emoji--transitioning-out');
-                    setTimeout(() => emojiContainerEl.lastChild.remove(), fadeOutDuration);
-                }
-            }, transitionSpeed);
+            if (document.hasFocus()) runEmojiAnimation();
         });
+
+        const runEmojiAnimation = () => {
+            if (!isRunningAnimation) {
+                isRunningAnimation = true;
+                const transitionSpeed = 5000;
+                const fadeOutDuration = 1200;
+                const emojiContainerEl = document.querySelector('.emoji-container');
+
+                const emojiArray = ['👋', '🪂', '👟', '🥝', '👨‍💻', '😛'];
+
+                intervalId = setInterval(() => {
+                    if (idx >= emojiArray.length - 1) idx = -1;
+
+                    const nextEmojiEl = document.createElement('span');
+                    nextEmojiEl.classList.add('emoji');
+                    nextEmojiEl.textContent = emojiArray[++idx];
+                    emojiContainerEl.prepend(nextEmojiEl);
+
+                    if (emojiContainerEl.children.length > 1) {
+                        emojiContainerEl.lastChild.classList.add('emoji--transitioning-out');
+                        setTimeout(() => emojiContainerEl.lastChild.remove(), fadeOutDuration);
+                    }
+                }, transitionSpeed);
+            }
+        };
+
+        const cancelEmojiAnimation = () => {
+            if (isRunningAnimation) {
+                isRunningAnimation = false;
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                }
+            }
+        };
     </script>
 </head>
 <body>
