@@ -124,7 +124,7 @@ Size and colour information concerning the sticker itself.
     --anisotropic-reflection-umbra-end-angle: calc((var(--anisotropic-reflection-penumbra-angular-width) / 2) + (var(--anisotropic-reflection-umbra-angular-width) / 2));
 
     position: relative;
-    max-width: 100%;
+    margin-block-start: 5rem;
 }
 
 .authenticity-sticker {
@@ -146,7 +146,6 @@ Size and colour information concerning the sticker itself.
  * anisotropic shadows and highlights via `*-gradient()` functions.
  */
 .authenticity-sticker__shadow {
-    transform: translateZ(0);
     position: absolute;
     left:0;
     right:0;
@@ -159,7 +158,7 @@ Size and colour information concerning the sticker itself.
     border-radius: 50%;
     width: var(--sticker-size);
     height: var(--sticker-size);
-    background-color: black;
+    background-color: white;
     clip-path: url(#sticker-outline);
     margin-inline: auto;
 }
