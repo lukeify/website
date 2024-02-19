@@ -146,6 +146,7 @@ Size and colour information concerning the sticker itself.
  * anisotropic shadows and highlights via `*-gradient()` functions if a `filter` appears to be applied.
  */
 .authenticity-sticker__shadow {
+    transform: translateZ(0); /* Significantly improves the frame rate of the animations discussed above */
     position: absolute;
     left:0;
     right:0;
