@@ -1,0 +1,329 @@
+/*
+Sticker: https://codepen.io/5t3ph/pen/mdVZYpr
+Sticker peel: https://codepen.io/bsehovac/pen/aqVobv
+Brushed metal toggle: https://codepen.io/iliadraznin/pen/AYQGKj
+Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
+ */
+
+.authenticity-sticker__wrapper {
+    /* PARAMETRIC CUSTOM PROPERTIES */
+
+    /**
+    The characteristics of the diffuse shadow around the sticker.
+    This is primarily to ensure both the sticker outline can be completely white while still maintaining contrast against the page background.
+     */
+    --sticker-diffuse-shadow-color: hsl(240deg 33.3% 11.8% / 0.2);
+    --sticker-diffuse-shadow-size: 2rem;
+    --sticker-diffuse-shadow-offset: 2px 2px;
+
+    /**
+    The characteristics of the sharp shadow immediately around the edges of the sticker.
+    This makes the wavy SVG boundary more visible.
+     */
+    --sticker-sharp-shadow-color: hsl(240deg 33.3% 11.8% / 0.5);
+    --sticker-sharp-shadow-size: calc(1rem / 3);
+    --sticker-sharp-shadow-offset: 0 0;
+
+    /**
+Size and colour information concerning the sticker itself.
+ */
+    --sticker-background-h: 233deg;
+    --sticker-background-s: 13%;
+    --sticker-background-l: 86.5%;
+    --sticker-background: hsl(var(--sticker-background-h) var(--sticker-background-s) var(--sticker-background-l));
+    --sticker-size: 10em;
+
+    /**
+    The size and color of the outline at the edge of the sticker.
+     */
+    --sticker-outline-width: 0.8em;
+    --sticker-outline-color: hsl(0deg 0% 98% / 1);
+
+    /**
+    TODO: Should this be kept?
+     */
+    --ring-size: 1.5;
+
+    /**
+    For inset text within the sticker, this determines its placement from the edge, and the color of the text itself.
+     */
+    --text-inset-distance: 2.8em;
+    --text-color: hsl(0deg 0% 15% / 1);
+
+    /**
+    When hovering over the sticker, we generate a bar of light that sweeps over it for funsies.
+     */
+    --light-sweep-width: 3em;
+    --light-sweep-angle: 20deg;
+    --light-sweep-peak-opaqueness: 0.8;
+    --light-sweep-animation-duration: 900ms;
+
+    /**
+    How strong, sensitive, and frequent the machining marks are within the sticker.
+     */
+    --machining-high-frequency-groove-color: hsl(0deg 0% 20% / 0.1);
+    --machining-high-frequency-groove-gap: 2px;
+    --machining-high-frequency-groove-peak: 0px;
+    --machining-high-frequency-groove-end: 1px;
+
+    --machining-low-frequency-groove-color: hsl(0deg 0% 20% / 0.08);
+    --machining-low-frequency-groove-gap: 14px;
+    --machining-low-frequency-groove-peak: 2px;
+    --machining-low-frequency-groove-end: 1px;
+
+    --machining-mid-frequency-shine-color: hsl(0deg 100% 100% / 0.5);
+    --machining-mid-frequency-shine-gap: 5px;
+    --machining-mid-frequency-shine-peak: 0px;
+    --machining-mid-frequency-shine-end: 2px;
+
+    /**
+    Defines how sharp the anisotropic effects are at the centre of the sticker (0 for sharp, 1 for blurred).
+     */
+    --anisotropic-sharpness-at-center: 0.5;
+
+    /**
+     Currently defines the entire positioning of all anisotropic effects on the sticker. This is the angle, measured
+     clockwise, at which the peak absorption effects of the anisotropy are present.
+     */
+    --anisotropic-absorption-peak-angle: 0deg;
+
+    /**
+    Defines the characteristics of the anisotropic absorption of light on the sticker, including the width of the
+    entire effect (the penumbra), and the width of the full intensity of the effect (the umbra).
+     */
+    --anisotropic-absorption-color: hsl(215deg 8% 28% / 1);
+    --anisotropic-absorption-umbra-angular-width: 20deg;
+    --anisotropic-absorption-penumbra-angular-width: 80deg;
+
+    /**
+    As above, but for the brighter anisotropic reflection.
+     */
+    --anisotropic-reflection-color: hsl(240deg 100% 99% / 1);
+    --anisotropic-reflection-umbra-angular-width: 10deg;
+    --anisotropic-reflection-penumbra-angular-width: 20deg;
+
+    /* COMPUTED CUSTOM PROPERTIES */
+    --machining-high-frequency-groove-peak-position: calc(var(--machining-high-frequency-groove-gap) + var(--machining-high-frequency-groove-peak));
+    --machining-high-frequency-groove-end-position: calc(var(--machining-high-frequency-groove-peak-position) + var(--machining-high-frequency-groove-end));
+
+    --machining-low-frequency-groove-peak-position: calc(var(--machining-low-frequency-groove-gap) + var(--machining-low-frequency-groove-peak));
+    --machining-low-frequency-groove-end-position: calc(var(--machining-low-frequency-groove-peak-position) + var(--machining-low-frequency-groove-end));
+
+    --machining-mid-frequency-shine-peak-position: calc(var(--machining-mid-frequency-shine-gap) + var(--machining-mid-frequency-shine-peak));
+    --machining-mid-frequency-shine-end-position: calc(var(--machining-mid-frequency-shine-peak-position) + var(--machining-mid-frequency-shine-end));
+
+    --anisotropic-absorption-starting-angle: calc(var(--anisotropic-absorption-peak-angle) - (var(--anisotropic-absorption-penumbra-angular-width) / 2));
+    --anisotropic-absorption-opposing-starting-angle: calc(var(--anisotropic-absorption-starting-angle) + (pi * 1rad));
+    --anisotropic-absorption-umbra-start-angle: calc((var(--anisotropic-absorption-penumbra-angular-width) / 2) - (var(--anisotropic-absorption-umbra-angular-width) / 2));
+    --anisotropic-absorption-umbra-end-angle: calc((var(--anisotropic-absorption-penumbra-angular-width) / 2) + (var(--anisotropic-absorption-umbra-angular-width) / 2));
+
+    --anisotropic-reflection-peak-angle: calc(var(--anisotropic-absorption-peak-angle) - ((pi * 1rad) / 2));
+    --anisotropic-reflection-starting-angle: calc(var(--anisotropic-reflection-peak-angle) - (var(--anisotropic-reflection-penumbra-angular-width) / 2));
+    --anisotropic-reflection-opposing-starting-angle: calc(var(--anisotropic-reflection-starting-angle) + (pi * 1rad));
+    --anisotropic-reflection-umbra-start-angle: calc((var(--anisotropic-reflection-penumbra-angular-width) / 2) - (var(--anisotropic-reflection-umbra-angular-width) / 2));
+    --anisotropic-reflection-umbra-end-angle: calc((var(--anisotropic-reflection-penumbra-angular-width) / 2) + (var(--anisotropic-reflection-umbra-angular-width) / 2));
+
+    position: relative;
+    margin-block: 5rem;
+}
+
+.authenticity-sticker {
+    width: var(--sticker-size);
+    height: var(--sticker-size);
+    border-radius: 50%;
+    margin-inline: auto;
+    background-color: var(--sticker-background);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    clip-path: url(#sticker-outline);
+}
+
+/**
+ * Generate an entirely separate DOM structure that is placed behind the authenticity sticker proper to hold the filter drop-shadow.
+ * This is for Safari's purposes, because as of Safari 17, there is significant lag in re-rendering the rotation and transformation of the
+ * anisotropic shadows and highlights via `*-gradient()` functions if a `filter` appears to be applied.
+ */
+.authenticity-sticker__shadow {
+    transform: translateZ(0); /* Significantly improves the frame rate of the animations discussed above */
+    position: absolute;
+    left:0;
+    right:0;
+    filter:
+            drop-shadow(var(--sticker-diffuse-shadow-offset) var(--sticker-diffuse-shadow-size) var(--sticker-diffuse-shadow-color))
+            drop-shadow(var(--sticker-sharp-shadow-offset) var(--sticker-sharp-shadow-size) var(--sticker-sharp-shadow-color));
+}
+
+.authenticity-sticker__shadow-clip-path {
+    border-radius: 50%;
+    width: var(--sticker-size);
+    height: var(--sticker-size);
+    background-color: white;
+    clip-path: url(#sticker-outline);
+    margin-inline: auto;
+}
+
+.authenticity-sticker::before {
+    content:"";
+    position: absolute;
+    width: var(--sticker-size);
+    height: var(--sticker-size);
+    z-index: 1000;
+    border: var(--sticker-outline-width) solid var(--sticker-outline-color);
+    border-radius: 50%;
+}
+
+@keyframes light-sweep {
+    from {
+        left: 0;
+        opacity: 20%;
+    }
+
+    50% {
+        opacity: var(--light-sweep-peak-opaqueness);
+    }
+
+    to {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+.authenticity-sticker:hover::after {
+    content:"";
+    position: absolute;
+    width: var(--light-sweep-width);
+    background-color: hsl(0deg 100% 100% / 0.6);
+    top: 0;
+    bottom: 0;
+    display: block;
+    z-index: 1000;
+    transform: rotate(var(--light-sweep-angle));
+    animation: ease-in var(--light-sweep-animation-duration) light-sweep forwards;
+}
+
+.authenticity-sticker__text-svg {
+    width: calc(var(--sticker-size) - var(--text-inset-distance));
+    z-index: 1000;
+    overflow: visible; /* Prevent text clipping when the text alignment of the elements is not perfect. */
+}
+
+.authenticity-sticker__text {
+    letter-spacing: 2px;
+    font-size: 0.5rem;
+    font-weight: 500;
+    fill: var(--text-color);
+}
+
+.authenticity-sticker__anisotropy, .authenticity-sticker__radial-machining {
+    position: absolute;
+    border-radius: 50%;
+    width: var(--sticker-size);
+    height: var(--sticker-size);
+}
+
+.authenticity-sticker__anisotropy--sharp-from-center {
+    /*transform: rotate(var(--anisotropic-absorption-peak-angle));*/
+    background:
+        radial-gradient(
+            closest-side,
+            hsl(var(--sticker-background-h) var(--sticker-background-s) var(--sticker-background-l) / var(--anisotropic-sharpness-at-center)),
+            var(--sticker-background) 50%
+        ),
+        conic-gradient(
+            from var(--anisotropic-absorption-starting-angle),
+            var(--anisotropic-absorption-color),
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-penumbra-angular-width),
+            transparent var(--anisotropic-absorption-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-absorption-opposing-starting-angle),
+            var(--anisotropic-absorption-color),
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-penumbra-angular-width),
+            transparent var(--anisotropic-absorption-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-reflection-starting-angle),
+            var(--anisotropic-reflection-color),
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-penumbra-angular-width),
+            transparent var(--anisotropic-reflection-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-reflection-opposing-starting-angle),
+            var(--anisotropic-reflection-color),
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-penumbra-angular-width),
+            transparent var(--anisotropic-reflection-penumbra-angular-width)
+        );
+}
+
+.authenticity-sticker__anisotropy--diffuse-from-edge {
+    /*transform: rotate(var(--anisotropic-absorption-peak-angle));*/
+    background:
+        radial-gradient(
+            closest-side,
+            var(--sticker-background) 0%,
+            transparent 100%
+        ),
+        conic-gradient(
+            from var(--anisotropic-absorption-starting-angle),
+            transparent,
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-umbra-start-angle),
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-umbra-end-angle),
+            transparent var(--anisotropic-absorption-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-absorption-opposing-starting-angle),
+            transparent,
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-umbra-start-angle),
+            var(--anisotropic-absorption-color) var(--anisotropic-absorption-umbra-end-angle),
+            transparent var(--anisotropic-absorption-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-reflection-starting-angle),
+            transparent,
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-umbra-start-angle),
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-umbra-end-angle),
+            transparent var(--anisotropic-reflection-penumbra-angular-width)
+        ),
+        conic-gradient(
+            from var(--anisotropic-reflection-opposing-starting-angle),
+            transparent,
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-umbra-start-angle),
+            var(--anisotropic-reflection-color) var(--anisotropic-reflection-umbra-end-angle),
+            transparent var(--anisotropic-reflection-penumbra-angular-width)
+        );
+    filter: blur(1px);
+}
+
+.authenticity-sticker__radial-machining {
+    background: repeating-radial-gradient(
+        circle at center,
+        transparent,
+        transparent var(--machining-high-frequency-groove-gap),
+        var(--machining-high-frequency-groove-color) var(--machining-high-frequency-groove-peak-position),
+        transparent var(--machining-high-frequency-groove-end-position)
+    ),
+    repeating-radial-gradient(
+        circle at center,
+        transparent,
+        transparent var(--machining-low-frequency-groove-gap),
+        var(--machining-low-frequency-groove-color) var(--machining-low-frequency-groove-peak-position),
+        transparent var(--machining-low-frequency-groove-end-position)
+    ),
+    repeating-radial-gradient(
+        circle at center,
+        transparent,
+        transparent var(--machining-mid-frequency-shine-gap),
+        var(--machining-mid-frequency-shine-color) var(--machining-mid-frequency-shine-peak-position),
+        transparent var(--machining-mid-frequency-shine-end-position)
+    );
+}
+
+/*.ring {*/
+/*    width: calc(var(--sticker-size) / var(--ring-size));*/
+/*    height: calc(var(--sticker-size) / var(--ring-size));*/
+/*    border-radius: 50%;*/
+/*    position: absolute;*/
+/*    border: 30px solid white;*/
+/*}*/

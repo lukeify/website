@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/variables.css">
     <link rel="stylesheet" href="styles/global.css">
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/components/authenticity-sticker.css">
     <link rel="stylesheet" href="styles/components/emoji.css">
     <script>
         let isRunningAnimation = false;
@@ -56,8 +57,48 @@
             }
         };
     </script>
+    <script>
+        let authenticityStickerWrapperElement;
+        let scheduledAnimationFrame = false;
+        document.addEventListener('DOMContentLoaded', () => {
+            authenticityStickerWrapperElement = document.querySelector('.authenticity-sticker__wrapper');
+            authenticityStickerWrapperElement.addEventListener('click', () => {
+                // iOS 13+ devices have this method present on the `DeviceMotionEvent` object.
+                if (typeof DeviceOrientationEvent.requestPermission == 'function') {
+                    DeviceOrientationEvent.requestPermission().then(() => {
+                        window.addEventListener('deviceorientation', handleOrientation);
+                    }).catch(console.error);
+                } else {
+                    window.addEventListener('deviceorientation', handleOrientation);
+                }
+
+            });
+        });
+
+        const requestAnimationFrameHandleOrientation = event => {
+            scheduledAnimationFrame = false;
+            authenticityStickerWrapperElement.style.setProperty("--anisotropic-absorption-peak-angle", `${event.beta.toFixed(0)}deg`);
+        }
+
+        const handleOrientation = event => {
+            if (scheduledAnimationFrame) {
+                return;
+            }
+
+            scheduledAnimationFrame = true;
+            window.requestAnimationFrame(() => requestAnimationFrameHandleOrientation(event));
+        }
+    </script>
 </head>
 <body>
+<svg width="0" height="0">
+    <defs>
+        <clipPath id="sticker-outline" clipPathUnits="objectBoundingBox">
+            <path d="M0.483,0.008C0.487,0.003 0.493,0 0.5,0C0.507,0 0.513,0.003 0.517,0.008L0.545,0.042C0.545,0.042 0.545,0.042 0.545,0.042C0.545,0.042 0.545,0.042 0.545,0.042L0.579,0.014C0.584,0.01 0.591,0.008 0.598,0.01C0.604,0.011 0.61,0.015 0.613,0.021L0.633,0.059C0.633,0.059 0.634,0.059 0.634,0.059C0.634,0.059 0.634,0.059 0.634,0.059L0.672,0.039C0.678,0.036 0.685,0.036 0.691,0.038C0.697,0.041 0.702,0.046 0.704,0.052L0.717,0.094C0.717,0.094 0.717,0.094 0.717,0.094C0.717,0.094 0.717,0.094 0.717,0.094L0.759,0.081C0.765,0.08 0.772,0.081 0.778,0.084C0.783,0.088 0.787,0.094 0.788,0.101L0.792,0.144C0.792,0.144 0.792,0.144 0.792,0.144C0.792,0.144 0.792,0.144 0.792,0.144L0.836,0.14C0.842,0.139 0.849,0.142 0.854,0.146C0.858,0.151 0.861,0.158 0.86,0.164L0.856,0.208C0.856,0.208 0.856,0.208 0.856,0.208C0.856,0.208 0.856,0.208 0.856,0.208L0.899,0.212C0.906,0.213 0.912,0.217 0.916,0.222C0.919,0.228 0.92,0.235 0.919,0.241L0.906,0.283C0.906,0.283 0.906,0.283 0.906,0.283C0.906,0.283 0.906,0.283 0.906,0.283L0.948,0.296C0.954,0.298 0.959,0.303 0.962,0.309C0.964,0.315 0.964,0.322 0.961,0.328L0.941,0.366C0.941,0.366 0.941,0.366 0.941,0.366C0.941,0.366 0.941,0.367 0.941,0.367L0.979,0.387C0.985,0.39 0.989,0.396 0.99,0.402C0.992,0.409 0.99,0.416 0.986,0.421L0.958,0.455C0.958,0.455 0.958,0.455 0.958,0.455C0.958,0.455 0.958,0.455 0.958,0.455L0.992,0.483C0.997,0.487 1,0.493 1,0.5C1,0.507 0.997,0.513 0.992,0.517L0.958,0.545C0.958,0.545 0.958,0.545 0.958,0.545C0.958,0.545 0.958,0.545 0.958,0.545L0.986,0.579C0.99,0.584 0.992,0.591 0.99,0.598C0.989,0.604 0.985,0.61 0.979,0.613L0.941,0.633C0.941,0.633 0.941,0.634 0.941,0.634C0.941,0.634 0.941,0.634 0.941,0.634L0.961,0.672C0.964,0.678 0.964,0.685 0.962,0.691C0.959,0.697 0.954,0.702 0.948,0.704L0.906,0.717C0.906,0.717 0.906,0.717 0.906,0.717C0.906,0.717 0.906,0.717 0.906,0.717L0.919,0.759C0.92,0.765 0.919,0.772 0.916,0.778C0.912,0.783 0.906,0.787 0.899,0.788L0.856,0.792C0.856,0.792 0.856,0.792 0.856,0.792C0.856,0.792 0.856,0.792 0.856,0.792L0.86,0.836C0.861,0.842 0.858,0.849 0.854,0.854C0.849,0.858 0.842,0.861 0.836,0.86L0.792,0.856C0.792,0.856 0.792,0.856 0.792,0.856C0.792,0.856 0.792,0.856 0.792,0.856L0.788,0.899C0.787,0.906 0.783,0.912 0.778,0.916C0.772,0.919 0.765,0.92 0.759,0.919L0.717,0.906C0.717,0.906 0.717,0.906 0.717,0.906C0.717,0.906 0.717,0.906 0.717,0.906L0.704,0.948C0.702,0.954 0.697,0.959 0.691,0.962C0.685,0.964 0.678,0.964 0.672,0.961L0.634,0.941C0.634,0.941 0.634,0.941 0.634,0.941C0.634,0.941 0.633,0.941 0.633,0.941L0.613,0.979C0.61,0.985 0.604,0.989 0.598,0.99C0.591,0.992 0.584,0.99 0.579,0.986L0.545,0.958C0.545,0.958 0.545,0.958 0.545,0.958C0.545,0.958 0.545,0.958 0.545,0.958L0.517,0.992C0.513,0.997 0.507,1 0.5,1C0.493,1 0.487,0.997 0.483,0.992L0.455,0.958C0.455,0.958 0.455,0.958 0.455,0.958C0.455,0.958 0.455,0.958 0.455,0.958L0.421,0.986C0.416,0.99 0.409,0.992 0.402,0.99C0.396,0.989 0.39,0.985 0.387,0.979L0.367,0.941C0.367,0.941 0.366,0.941 0.366,0.941C0.366,0.941 0.366,0.941 0.366,0.941L0.328,0.961C0.322,0.964 0.315,0.964 0.309,0.962C0.303,0.959 0.298,0.954 0.296,0.948L0.283,0.906C0.283,0.906 0.283,0.906 0.283,0.906C0.283,0.906 0.283,0.906 0.283,0.906L0.241,0.919C0.235,0.92 0.228,0.919 0.222,0.916C0.217,0.912 0.213,0.906 0.212,0.899L0.208,0.856C0.208,0.856 0.208,0.856 0.208,0.856C0.208,0.856 0.208,0.856 0.208,0.856L0.164,0.86C0.158,0.861 0.151,0.858 0.146,0.854C0.142,0.849 0.139,0.842 0.14,0.836L0.144,0.792C0.144,0.792 0.144,0.792 0.144,0.792C0.144,0.792 0.144,0.792 0.144,0.792L0.101,0.788C0.094,0.787 0.088,0.783 0.084,0.778C0.081,0.772 0.08,0.765 0.081,0.759L0.094,0.717C0.094,0.717 0.094,0.717 0.094,0.717C0.094,0.717 0.094,0.717 0.094,0.717L0.052,0.704C0.046,0.702 0.041,0.697 0.038,0.691C0.036,0.685 0.036,0.678 0.039,0.672L0.059,0.634C0.059,0.634 0.059,0.634 0.059,0.634C0.059,0.634 0.059,0.633 0.059,0.633L0.021,0.613C0.015,0.61 0.011,0.604 0.01,0.598C0.008,0.591 0.01,0.584 0.014,0.579L0.042,0.545C0.042,0.545 0.042,0.545 0.042,0.545C0.042,0.545 0.042,0.545 0.042,0.545L0.008,0.517C0.003,0.513 0,0.507 0,0.5C0,0.493 0.003,0.487 0.008,0.483L0.042,0.455C0.042,0.455 0.042,0.455 0.042,0.455C0.042,0.455 0.042,0.455 0.042,0.455L0.014,0.421C0.01,0.416 0.008,0.409 0.01,0.402C0.011,0.396 0.015,0.39 0.021,0.387L0.059,0.367C0.059,0.367 0.059,0.366 0.059,0.366C0.059,0.366 0.059,0.366 0.059,0.366L0.039,0.328C0.036,0.322 0.036,0.315 0.038,0.309C0.041,0.303 0.046,0.298 0.052,0.296L0.094,0.283C0.094,0.283 0.094,0.283 0.094,0.283C0.094,0.283 0.094,0.283 0.094,0.283L0.081,0.241C0.08,0.235 0.081,0.228 0.084,0.222C0.088,0.217 0.094,0.213 0.101,0.212L0.144,0.208C0.144,0.208 0.144,0.208 0.144,0.208C0.144,0.208 0.144,0.208 0.144,0.208L0.14,0.164C0.139,0.158 0.142,0.151 0.146,0.146C0.151,0.142 0.158,0.139 0.164,0.14L0.208,0.144C0.208,0.144 0.208,0.144 0.208,0.144C0.208,0.144 0.208,0.144 0.208,0.144L0.212,0.101C0.213,0.094 0.217,0.088 0.222,0.084C0.228,0.081 0.235,0.08 0.241,0.081L0.283,0.094C0.283,0.094 0.283,0.094 0.283,0.094C0.283,0.094 0.283,0.094 0.283,0.094L0.296,0.052C0.298,0.046 0.303,0.041 0.309,0.038C0.315,0.036 0.322,0.036 0.328,0.039L0.366,0.059C0.366,0.059 0.366,0.059 0.366,0.059C0.366,0.059 0.367,0.059 0.367,0.059L0.387,0.021C0.39,0.015 0.396,0.011 0.402,0.01C0.409,0.008 0.416,0.01 0.421,0.014L0.455,0.042C0.455,0.042 0.455,0.042 0.455,0.042C0.455,0.042 0.455,0.042 0.455,0.042L0.483,0.008Z"></path>
+        </clipPath>
+    </defs>
+</svg>
+
     <!-- Above the fold -->
     <h1 class="headline">
         <span class="emoji-container"><span class="emoji">👋</span></span> Hello!
@@ -69,5 +110,26 @@
     <ul>
         <li>GitHub: <a href="https://github.com/lukeify">lukeify</a></li>
     </ul>
+
+    <div class="authenticity-sticker__wrapper">
+        <div class="authenticity-sticker__shadow">
+            <div class="authenticity-sticker__shadow-clip-path"></div>
+        </div>
+        <div class="authenticity-sticker">
+            <svg class="authenticity-sticker__text-svg" viewBox="0 0 100 100">
+                <path id="top-curve" d="M 0 50 A 1 1 0 1 1 100 50" fill="none" />
+                <path id="bottom-curve" d="M 0 50 A 1 1 0 1 0 100 50" fill="none" />
+                <text>
+                    <!-- The use of `alignment-baseline` in Firefox does not correctly place the text with respect to the rest of the DOM elements, so use `dominant-baseline` instead. -->
+                    <!-- See: https://github.com/eladnava/material-letter-icons/issues/7 -->
+                    <textPath class="authenticity-sticker__text" dominant-baseline="hanging" text-anchor="middle" xlink:href="#top-curve" startOffset="50%">AUTHENTICALLY</textPath>
+                    <textPath class="authenticity-sticker__text" dominant-baseline="auto" text-anchor="middle" xlink:href="#bottom-curve" startOffset="50%">CRAFTED</textPath>
+                </text>
+            </svg>
+            <div class="authenticity-sticker__anisotropy authenticity-sticker__anisotropy--sharp-from-center"></div>
+            <div class="authenticity-sticker__radial-machining"></div>
+            <div class="authenticity-sticker__anisotropy authenticity-sticker__anisotropy--diffuse-from-edge"></div>
+        </div>
+    </div>
 </body>
 </html>
