@@ -5,7 +5,7 @@ Brushed metal toggle: https://codepen.io/iliadraznin/pen/AYQGKj
 Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
  */
 
-.soa__wrapper {
+.authenticity-sticker__wrapper {
     /* PARAMETRIC CUSTOM PROPERTIES */
 
     /**
@@ -127,7 +127,7 @@ Size and colour information concerning the sticker itself.
     max-width: 100%;
 }
 
-.soa {
+.authenticity-sticker {
     width: var(--sticker-size);
     height: var(--sticker-size);
     border-radius: 50%;
@@ -145,7 +145,7 @@ Size and colour information concerning the sticker itself.
  * This is for Safari's purposes, because as of Safari 17, there is significant lag in re-rendering the rotation and transformation of the
  * anisotropic shadows and highlights via `*-gradient()` functions.
  */
-.soa__shadow {
+.authenticity-sticker__shadow {
     transform: translateZ(0);
     position: absolute;
     left:0;
@@ -155,7 +155,7 @@ Size and colour information concerning the sticker itself.
             drop-shadow(var(--sticker-sharp-shadow-offset) var(--sticker-sharp-shadow-size) var(--sticker-sharp-shadow-color));
 }
 
-.soa__shadow-clip-path {
+.authenticity-sticker__shadow-clip-path {
     border-radius: 50%;
     width: var(--sticker-size);
     height: var(--sticker-size);
@@ -165,7 +165,7 @@ Size and colour information concerning the sticker itself.
 }
 
 
-.soa::before {
+.authenticity-sticker::before {
     content:"";
     position: absolute;
     width: var(--sticker-size);
@@ -191,7 +191,7 @@ Size and colour information concerning the sticker itself.
     }
 }
 
-.soa:hover::after {
+.authenticity-sticker:hover::after {
     content:"";
     position: absolute;
     width: var(--light-sweep-width);
@@ -204,26 +204,26 @@ Size and colour information concerning the sticker itself.
     animation: ease-in var(--light-sweep-animation-duration) light-sweep forwards;
 }
 
-.soa__authenticity-text-svg {
+.authenticity-sticker__text-svg {
     width: calc(var(--sticker-size) - var(--text-inset-distance));
     z-index: 1000;
 }
 
-.soa__authenticity-text {
+.authenticity-sticker__text {
     letter-spacing: 2px;
     font-size: 0.5rem;
     font-weight: 500;
     fill: var(--text-color);
 }
 
-.soa__anisotropy, .soa__radial-machining {
+.authenticity-sticker__anisotropy, .authenticity-sticker__radial-machining {
     position: absolute;
     border-radius: 50%;
     width: var(--sticker-size);
     height: var(--sticker-size);
 }
 
-.soa__anisotropy--sharp-from-center {
+.authenticity-sticker__anisotropy--sharp-from-center {
     /*transform: rotate(var(--anisotropic-absorption-peak-angle));*/
     background:
         radial-gradient(
@@ -257,7 +257,7 @@ Size and colour information concerning the sticker itself.
         );
 }
 
-.soa__anisotropy--diffuse-from-edge {
+.authenticity-sticker__anisotropy--diffuse-from-edge {
     /*transform: rotate(var(--anisotropic-absorption-peak-angle));*/
     background:
         radial-gradient(
@@ -296,7 +296,7 @@ Size and colour information concerning the sticker itself.
     filter: blur(1px);
 }
 
-.soa__radial-machining {
+.authenticity-sticker__radial-machining {
     background: repeating-radial-gradient(
         circle at center,
         transparent,

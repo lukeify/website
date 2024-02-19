@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="styles/variables.css">
     <link rel="stylesheet" href="styles/global.css">
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/components/authenticity-sticker.css">
     <link rel="stylesheet" href="styles/components/emoji.css">
-    <link rel="stylesheet" href="styles/components/sticker-of-authenticity.css">
     <script>
         let isRunningAnimation = false;
         let idx = 0;
@@ -58,11 +58,11 @@
         };
     </script>
     <script>
-        let soaWrapperElement;
+        let authenticityStickerWrapperElement;
         let scheduledAnimationFrame = false;
         document.addEventListener('DOMContentLoaded', () => {
-            soaWrapperElement = document.querySelector('.soa__wrapper');
-            soaWrapperElement.addEventListener('click', () => {
+            authenticityStickerWrapperElement = document.querySelector('.authenticity-sticker__wrapper');
+            authenticityStickerWrapperElement.addEventListener('click', () => {
                 // iOS 13+ devices have this method present on the `DeviceMotionEvent` object.
                 if (typeof DeviceOrientationEvent.requestPermission == 'function') {
                     DeviceOrientationEvent.requestPermission().then(() => {
@@ -77,7 +77,7 @@
 
         const requestAnimationFrameHandleOrientation = event => {
             scheduledAnimationFrame = false;
-            soaWrapperElement.style.setProperty("--anisotropic-absorption-peak-angle", `${event.beta.toFixed(0)}deg`);
+            authenticityStickerWrapperElement.style.setProperty("--anisotropic-absorption-peak-angle", `${event.beta.toFixed(0)}deg`);
         }
 
         const handleOrientation = event => {
@@ -111,23 +111,22 @@
         <li>GitHub: <a href="https://github.com/lukeify">lukeify</a></li>
     </ul>
 
-    <div class="soa__wrapper">
-        <div class="soa__shadow">
-            <div class="soa__shadow-clip-path"></div>
+    <div class="authenticity-sticker__wrapper">
+        <div class="authenticity-sticker__shadow">
+            <div class="authenticity-sticker__shadow-clip-path"></div>
         </div>
-        <div class="soa">
-            <svg class="soa__authenticity-text-svg" viewBox="0 0 100 100">
+        <div class="authenticity-sticker">
+            <svg class="authenticity-sticker__text-svg" viewBox="0 0 100 100">
                 <path id="top-curve" d="M 0 50 A 1 1 0 1 1 100 50" fill="none" />
                 <path id="bottom-curve" d="M 0 50 A 1 1 0 1 0 100 50" fill="none" />
                 <text>
-                    <textPath class="soa__authenticity-text" alignment-baseline="before-edge" text-anchor="middle" xlink:href="#top-curve" startOffset="50%">AUTHENTICALLY</textPath>
-                    <textPath class="soa__authenticity-text" alignment-baseline="after-edge" text-anchor="middle" xlink:href="#bottom-curve" startOffset="50%">CRAFTED</textPath>
+                    <textPath class="authenticity-sticker__text" alignment-baseline="before-edge" text-anchor="middle" xlink:href="#top-curve" startOffset="50%">AUTHENTICALLY</textPath>
+                    <textPath class="authenticity-sticker__text" alignment-baseline="after-edge" text-anchor="middle" xlink:href="#bottom-curve" startOffset="50%">CRAFTED</textPath>
                 </text>
             </svg>
-            <div class="soa__anisotropy soa__anisotropy--sharp-from-center"></div>
-            <div class="soa__radial-machining"></div>
-            <div class="soa__anisotropy soa__anisotropy--diffuse-from-edge"></div>
-            <div class="ring"></div>
+            <div class="authenticity-sticker__anisotropy authenticity-sticker__anisotropy--sharp-from-center"></div>
+            <div class="authenticity-sticker__radial-machining"></div>
+            <div class="authenticity-sticker__anisotropy authenticity-sticker__anisotropy--diffuse-from-edge"></div>
         </div>
     </div>
 </body>
