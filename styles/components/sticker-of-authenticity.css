@@ -12,7 +12,7 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     The characteristics of the diffuse shadow around the sticker.
     This is primarily to ensure both the sticker outline can be completely white while still maintaining contrast against the page background.
      */
-    --sticker-diffuse-shadow-color: hsl(240deg 33.3% 11.8% / 0.1);
+    --sticker-diffuse-shadow-color: hsl(240deg 33.3% 11.8% / 0.2);
     --sticker-diffuse-shadow-size: 2rem;
     --sticker-diffuse-shadow-offset: 2px 2px;
 
@@ -20,23 +20,23 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     The characteristics of the sharp shadow immediately around the edges of the sticker.
     This makes the wavy SVG boundary more visible.
      */
-    --sticker-sharp-shadow-color: hsl(240deg 33.3% 11.8% / 0.3);
+    --sticker-sharp-shadow-color: hsl(240deg 33.3% 11.8% / 0.5);
     --sticker-sharp-shadow-size: calc(1rem / 3);
     --sticker-sharp-shadow-offset: 0 0;
 
     /**
-    Size and colour information concerning the sticker itself.
-     */
+Size and colour information concerning the sticker itself.
+ */
     --sticker-background-h: 233deg;
     --sticker-background-s: 13%;
     --sticker-background-l: 86.5%;
     --sticker-background: hsl(var(--sticker-background-h) var(--sticker-background-s) var(--sticker-background-l));
-    --sticker-size: 15em;
+    --sticker-size: 10em;
 
     /**
     The size and color of the outline at the edge of the sticker.
      */
-    --sticker-outline-width: 1.25em;
+    --sticker-outline-width: 0.8em;
     --sticker-outline-color: hsl(0deg 0% 98% / 1);
 
     /**
@@ -85,7 +85,7 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
      Currently defines the entire positioning of all anisotropic effects on the sticker. This is the angle, measured
      clockwise, at which the peak absorption effects of the anisotropy are present.
      */
-    --anisotropic-absorption-peak-angle: 60deg;
+    --anisotropic-absorption-peak-angle: 0deg;
 
     /**
     Defines the characteristics of the anisotropic absorption of light on the sticker, including the width of the
@@ -123,9 +123,8 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     --anisotropic-reflection-umbra-start-angle: calc((var(--anisotropic-reflection-penumbra-angular-width) / 2) - (var(--anisotropic-reflection-umbra-angular-width) / 2));
     --anisotropic-reflection-umbra-end-angle: calc((var(--anisotropic-reflection-penumbra-angular-width) / 2) + (var(--anisotropic-reflection-umbra-angular-width) / 2));
 
-    filter:
-        drop-shadow(var(--sticker-diffuse-shadow-offset) var(--sticker-diffuse-shadow-size) var(--sticker-diffuse-shadow-color))
-        drop-shadow(var(--sticker-sharp-shadow-offset) var(--sticker-sharp-shadow-size) var(--sticker-sharp-shadow-color));
+    position: relative;
+    max-width: 100%;
 }
 
 .soa {
@@ -140,6 +139,31 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
     align-items: center;
     clip-path: url(#sticker-outline);
 }
+
+/**
+ * Generate an entirely separate DOM structure that is placed behind the authenticity sticker proper to hold the filter drop-shadow.
+ * This is for Safari's purposes, because as of Safari 17, there is significant lag in re-rendering the rotation and transformation of the
+ * anisotropic shadows and highlights via `*-gradient()` functions.
+ */
+.soa__shadow {
+    transform: translateZ(0);
+    position: absolute;
+    left:0;
+    right:0;
+    filter:
+            drop-shadow(var(--sticker-diffuse-shadow-offset) var(--sticker-diffuse-shadow-size) var(--sticker-diffuse-shadow-color))
+            drop-shadow(var(--sticker-sharp-shadow-offset) var(--sticker-sharp-shadow-size) var(--sticker-sharp-shadow-color));
+}
+
+.soa__shadow-clip-path {
+    border-radius: 50%;
+    width: var(--sticker-size);
+    height: var(--sticker-size);
+    background-color: black;
+    clip-path: url(#sticker-outline);
+    margin-inline: auto;
+}
+
 
 .soa::before {
     content:"";
@@ -200,6 +224,7 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
 }
 
 .soa__anisotropy--sharp-from-center {
+    /*transform: rotate(var(--anisotropic-absorption-peak-angle));*/
     background:
         radial-gradient(
             closest-side,
@@ -233,6 +258,7 @@ Brushed metal buttons: https://codepen.io/simurai/pen/kvyEeg
 }
 
 .soa__anisotropy--diffuse-from-edge {
+    /*transform: rotate(var(--anisotropic-absorption-peak-angle));*/
     background:
         radial-gradient(
             closest-side,

@@ -58,12 +58,36 @@
         };
     </script>
     <script>
+        let soaWrapperElement;
+        let scheduledAnimationFrame = false;
         document.addEventListener('DOMContentLoaded', () => {
-            const soa = document.querySelector('.soa__permission');
-            soa.addEventListener('click', () => {
-                DeviceMotionEvent.requestPermission().then(() => {}).catch(console.error);
+            soaWrapperElement = document.querySelector('.soa__wrapper');
+            soaWrapperElement.addEventListener('click', () => {
+                // iOS 13+ devices have this method present on the `DeviceMotionEvent` object.
+                if (typeof DeviceOrientationEvent.requestPermission == 'function') {
+                    DeviceOrientationEvent.requestPermission().then(() => {
+                        window.addEventListener('deviceorientation', handleOrientation);
+                    }).catch(console.error);
+                } else {
+                    window.addEventListener('deviceorientation', handleOrientation);
+                }
+
             });
         });
+
+        const requestAnimationFrameHandleOrientation = event => {
+            scheduledAnimationFrame = false;
+            soaWrapperElement.style.setProperty("--anisotropic-absorption-peak-angle", `${event.beta.toFixed(0)}deg`);
+        }
+
+        const handleOrientation = event => {
+            if (scheduledAnimationFrame) {
+                return;
+            }
+
+            scheduledAnimationFrame = true;
+            window.requestAnimationFrame(() => requestAnimationFrameHandleOrientation(event));
+        }
     </script>
 </head>
 <body>
@@ -87,10 +111,10 @@
         <li>GitHub: <a href="https://github.com/lukeify">lukeify</a></li>
     </ul>
 
-<button class="soa__permission">
-    Request permission
-</button>
     <div class="soa__wrapper">
+        <div class="soa__shadow">
+            <div class="soa__shadow-clip-path"></div>
+        </div>
         <div class="soa">
             <svg class="soa__authenticity-text-svg" viewBox="0 0 100 100">
                 <path id="top-curve" d="M 0 50 A 1 1 0 1 1 100 50" fill="none" />
