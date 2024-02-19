@@ -124,7 +124,7 @@ Size and colour information concerning the sticker itself.
     --anisotropic-reflection-umbra-end-angle: calc((var(--anisotropic-reflection-penumbra-angular-width) / 2) + (var(--anisotropic-reflection-umbra-angular-width) / 2));
 
     position: relative;
-    margin-block-start: 5rem;
+    margin-block: 5rem;
 }
 
 .authenticity-sticker {
