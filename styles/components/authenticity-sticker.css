@@ -143,7 +143,7 @@ Size and colour information concerning the sticker itself.
 /**
  * Generate an entirely separate DOM structure that is placed behind the authenticity sticker proper to hold the filter drop-shadow.
  * This is for Safari's purposes, because as of Safari 17, there is significant lag in re-rendering the rotation and transformation of the
- * anisotropic shadows and highlights via `*-gradient()` functions.
+ * anisotropic shadows and highlights via `*-gradient()` functions if a `filter` appears to be applied.
  */
 .authenticity-sticker__shadow {
     position: absolute;
@@ -162,7 +162,6 @@ Size and colour information concerning the sticker itself.
     clip-path: url(#sticker-outline);
     margin-inline: auto;
 }
-
 
 .authenticity-sticker::before {
     content:"";
@@ -206,6 +205,7 @@ Size and colour information concerning the sticker itself.
 .authenticity-sticker__text-svg {
     width: calc(var(--sticker-size) - var(--text-inset-distance));
     z-index: 1000;
+    overflow: visible; /* Prevent text clipping when the text alignment of the elements is not perfect. */
 }
 
 .authenticity-sticker__text {

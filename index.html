@@ -120,8 +120,10 @@
                 <path id="top-curve" d="M 0 50 A 1 1 0 1 1 100 50" fill="none" />
                 <path id="bottom-curve" d="M 0 50 A 1 1 0 1 0 100 50" fill="none" />
                 <text>
-                    <textPath class="authenticity-sticker__text" alignment-baseline="before-edge" text-anchor="middle" xlink:href="#top-curve" startOffset="50%">AUTHENTICALLY</textPath>
-                    <textPath class="authenticity-sticker__text" alignment-baseline="after-edge" text-anchor="middle" xlink:href="#bottom-curve" startOffset="50%">CRAFTED</textPath>
+                    <!-- The use of `alignment-baseline` in Firefox does not correctly place the text with respect to the rest of the DOM elements, so use `dominant-baseline` instead. -->
+                    <!-- See: https://github.com/eladnava/material-letter-icons/issues/7 -->
+                    <textPath class="authenticity-sticker__text" dominant-baseline="hanging" text-anchor="middle" xlink:href="#top-curve" startOffset="50%">AUTHENTICALLY</textPath>
+                    <textPath class="authenticity-sticker__text" dominant-baseline="auto" text-anchor="middle" xlink:href="#bottom-curve" startOffset="50%">CRAFTED</textPath>
                 </text>
             </svg>
             <div class="authenticity-sticker__anisotropy authenticity-sticker__anisotropy--sharp-from-center"></div>
