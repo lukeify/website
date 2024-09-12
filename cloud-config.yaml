@@ -1,0 +1,33 @@
+#cloud-config
+# vim: syntax=yaml
+
+# Arrive at a maximally up-to-date system state
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+
+# Install the following packages on first boot.
+packages:
+  - nginx
+
+timezone: Etc/UTC
+
+groups:
+  - cloud-users
+
+users:
+  - name: luke
+    gecos: Luke
+    shell: /bin/bash
+    groups: [sudo, admin, cloud-users]
+    # Disable password login.
+    lock_passwd: true
+    chpasswd: { expire: true }
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE46x4l8eJC7MOkf0n0GIe0HR37l8SDLgfKtJSrWGuf9 LukesEd22519SSHKey
+
+runcmd:
+  # https://www.linode.com/docs/guides/manage-users-with-cloud-init/#disable-root-user
+  - sed -i '/PermitRootLogin/d' /etc/ssh/sshd_config
+  - echo "PermitRootLogin no" >> /etc/ssh/sshd_config
+  - systemctl restart sshd
