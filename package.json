@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "npx webpack-dev-server --mode=development"
+    "build": "npx webpack --mode=production",
+    "dev": "npx webpack-dev-server --mode=development",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
