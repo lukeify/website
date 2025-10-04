@@ -1,3 +1,4 @@
 .gitignored/
+dist/
 node_modules/
 typefaces/*
