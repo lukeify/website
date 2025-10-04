@@ -1,4 +1,4 @@
 .gitignored/
-typefaces/
-.idea/
+dist/
 node_modules/
+typefaces/*
