@@ -2,7 +2,8 @@
     --primary-text--light-appearance: hsl(0deg 0% 20%);
     --primary-bg--light-appearance: hsl(0deg 100% 100%);
 
-    --primary-typeface: 'Neue Haas Grotesk Display';
+    --display-typeface: 'Neue Haas Grotesk Display Pro';
+    --text-typeface: 'Neue Haas Grotesk Text Pro';
 
     --content-width: 36em;
 }
