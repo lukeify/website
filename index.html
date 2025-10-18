@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/variables.css">
     <link rel="stylesheet" href="styles/global.css">
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/xmb.css">
     <link rel="stylesheet" href="styles/components/authenticity-sticker.css">
     <link rel="stylesheet" href="styles/components/emoji.css">
     <script>
@@ -99,37 +100,93 @@
     </defs>
 </svg>
 
+<main data-controller="xmb" data-action="keydown@window->xmb#handleKeydown">
+    <section data-xmb-target="primary" data-xmb-primary-active>
+        <h1>Hello!</h1>
+        <div class="contents">
+            <h2>Intro</h2>
+            <div>
+                <p>This site uses an intersectional interface reminiscent of the XrossMediaBar (XMB) on the PlayStation Portable and PS3.</p>
+                <p>Navigate this site using your keyboard arrows, click the on-screen arrows with your mouse, or scroll to move through the Z-axis of the currently selected header.</p>
+            </div>
+            <h2>Site Navigation</h2>
+            <div>
+                <p>Navigate this site using the </p>
+            </div>
+        </div>
+    </section>
+
+    <section data-xmb-target="primary">
+        <h1 class="header--inactive">Posts</h1>
+        <div class="contents">
+            <h2>Recent Post A</h2>
+            <h2>Recent Post B</h2>
+            <h2>Recent Post C</h2>
+        </div>
+    </section>
+
+    <section data-xmb-target="primary">
+        <h1 class="header--inactive">Hobbies</h1>
+        <div class="contents">
+            <h2>Foo</h2>
+            <h2>Bar</h2>
+        </div>
+    </section>
+
+    <section data-xmb-target="primary">
+        <h1 class="header--inactive">Projects</h1>
+        <div class="contents">
+            <h2>Foo</h2>
+            <h2>Bar</h2>
+        </div>
+    </section>
+
+    <section data-xmb-target="primary">
+        <h1 class="header--inactive">Work</h1>
+        <div class="contents">
+            <h2>Currently</h2>
+            <h2>Get in touch!</h2>
+        </div>
+    </section>
+
+    <section data-xmb-target="primary">
+        <h1 class="header--inactive">About</h1>
+        <div class="contents">
+            <h2>Principles</h2>
+            <h2>Preferences</h2>
+        </div>
+    </section>
+</main>
+
+
     <!-- Above the fold -->
-    <h1 class="hed">
-        <span class="emoji-container"><span class="emoji">👋</span></span> Hello!
-    </h1>
-    <p>I'm <strong>Luke</strong>—a software engineer living in 📍 <a href="https://maps.apple.com/?address=Central%20Otago%20District,%20New%20Zealand">Central Otago, New Zealand</a>.</p>
-    <p>Currently, I'm a Senior Rails Developer at <a href="https://ackama.com">Ackama</a>; and also run a small business, Bluewing.</p>
-    <p>I don't maintain a strong internet presence, but you can see the things I work on, connect—or just send me a message if you'd like to go paragliding together!—use the links below.</p>
+<!--    <p>I'm <strong>Luke</strong>—a software engineer living in 📍 <a href="https://maps.apple.com/?address=Central%20Otago%20District,%20New%20Zealand">Central Otago, New Zealand</a>.</p>-->
+<!--    <p>Currently, I'm a Senior Rails Developer at <a href="https://ackama.com">Ackama</a>; and also run a small business, Bluewing.</p>-->
+<!--    <p>I don't maintain a strong internet presence, but you can see the things I work on, connect—or just send me a message if you'd like to go paragliding together!—use the links below.</p>-->
 
-    <ul>
-        <li>GitHub: <a href="https://github.com/lukeify">lukeify</a></li>
-    </ul>
+<!--    <ul>-->
+<!--        <li>GitHub: <a href="https://github.com/lukeify">lukeify</a></li>-->
+<!--    </ul>-->
 
-    <div class="authenticity-sticker__wrapper">
-        <div class="authenticity-sticker__shadow">
-            <div class="authenticity-sticker__shadow-clip-path"></div>
-        </div>
-        <div class="authenticity-sticker">
-            <svg class="authenticity-sticker__text-svg" viewBox="0 0 100 100">
-                <path id="top-curve" d="M 0 50 A 1 1 0 1 1 100 50" fill="none" />
-                <path id="bottom-curve" d="M 0 50 A 1 1 0 1 0 100 50" fill="none" />
-                <text>
-                    <!-- The use of `alignment-baseline` in Firefox does not correctly place the text with respect to the rest of the DOM elements, so use `dominant-baseline` instead. -->
-                    <!-- See: https://github.com/eladnava/material-letter-icons/issues/7 -->
-                    <textPath class="authenticity-sticker__text" dominant-baseline="hanging" text-anchor="middle" xlink:href="#top-curve" startOffset="50%">AUTHENTICALLY</textPath>
-                    <textPath class="authenticity-sticker__text" dominant-baseline="auto" text-anchor="middle" xlink:href="#bottom-curve" startOffset="50%">CRAFTED</textPath>
-                </text>
-            </svg>
-            <div class="authenticity-sticker__anisotropy authenticity-sticker__anisotropy--sharp-from-center"></div>
-            <div class="authenticity-sticker__radial-machining"></div>
-            <div class="authenticity-sticker__anisotropy authenticity-sticker__anisotropy--diffuse-from-edge"></div>
-        </div>
-    </div>
+<!--    <div class="authenticity-sticker__wrapper">-->
+<!--        <div class="authenticity-sticker__shadow">-->
+<!--            <div class="authenticity-sticker__shadow-clip-path"></div>-->
+<!--        </div>-->
+<!--        <div class="authenticity-sticker">-->
+<!--            <svg class="authenticity-sticker__text-svg" viewBox="0 0 100 100">-->
+<!--                <path id="top-curve" d="M 0 50 A 1 1 0 1 1 100 50" fill="none" />-->
+<!--                <path id="bottom-curve" d="M 0 50 A 1 1 0 1 0 100 50" fill="none" />-->
+<!--                <text>-->
+<!--                    &lt;!&ndash; The use of `alignment-baseline` in Firefox does not correctly place the text with respect to the rest of the DOM elements, so use `dominant-baseline` instead. &ndash;&gt;-->
+<!--                    &lt;!&ndash; See: https://github.com/eladnava/material-letter-icons/issues/7 &ndash;&gt;-->
+<!--                    <textPath class="authenticity-sticker__text" dominant-baseline="hanging" text-anchor="middle" xlink:href="#top-curve" startOffset="50%">AUTHENTICALLY</textPath>-->
+<!--                    <textPath class="authenticity-sticker__text" dominant-baseline="auto" text-anchor="middle" xlink:href="#bottom-curve" startOffset="50%">CRAFTED</textPath>-->
+<!--                </text>-->
+<!--            </svg>-->
+<!--            <div class="authenticity-sticker__anisotropy authenticity-sticker__anisotropy&#45;&#45;sharp-from-center"></div>-->
+<!--            <div class="authenticity-sticker__radial-machining"></div>-->
+<!--            <div class="authenticity-sticker__anisotropy authenticity-sticker__anisotropy&#45;&#45;diffuse-from-edge"></div>-->
+<!--        </div>-->
+<!--    </div>-->
 </body>
 </html>

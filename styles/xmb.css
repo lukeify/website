@@ -1,0 +1,25 @@
+main {
+  --x-translation: 0;
+  --z-translation: 0;
+  display: flex;
+  transition: transform 100ms ease;
+  transform: translateX(var(--x-translation));
+}
+
+section {
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    opacity: 0.2;
+  }
+}
+
+section[data-xmb-primary-active] {
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    opacity: 1;
+  }
+}
+
+.contents {
+  position: absolute;
+}
