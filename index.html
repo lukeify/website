@@ -103,56 +103,70 @@
 <main data-controller="xmb" data-action="keydown@window->xmb#handleKeydown">
     <section data-xmb-target="primary" data-xmb-primary-active>
         <h1>Hello!</h1>
-        <div class="contents">
+        <div class="subsection" data-xmb-target="secondary" data-xmb-secondary-active>
             <h2>Intro</h2>
-            <div>
-                <p>This site uses an intersectional interface reminiscent of the XrossMediaBar (XMB) on the PlayStation Portable and PS3.</p>
-                <p>Navigate this site using your keyboard arrows, click the on-screen arrows with your mouse, or scroll to move through the Z-axis of the currently selected header.</p>
-            </div>
+            <p>This site uses an intersectional interface reminiscent of the XrossMediaBar (XMB) on the PlayStation Portable and PS3.</p>
+            <p>Navigate this site using your keyboard arrows, click the on-screen arrows with your mouse, or scroll to move through the Z-axis of the currently selected header.</p>
+        </div>
+        <div class="subsection" data-xmb-target="secondary" data-xmb-secondary-backgrounded>
             <h2>Site Navigation</h2>
-            <div>
-                <p>Navigate this site using the </p>
-            </div>
+            <p>Navigate this site using the arrow keys.</p>
+        </div>
+        <div class="subsection" data-xmb-target="secondary">
+            <h2>Final</h2>
+            <p>Foo bar</p>
         </div>
     </section>
 
     <section data-xmb-target="primary">
         <h1 class="header--inactive">Posts</h1>
-        <div class="contents">
+        <div class="subsection">
             <h2>Recent Post A</h2>
+        </div>
+        <div class="subsection">
             <h2>Recent Post B</h2>
+        </div>
+        <div class="subsection">
             <h2>Recent Post C</h2>
         </div>
     </section>
 
     <section data-xmb-target="primary">
         <h1 class="header--inactive">Hobbies</h1>
-        <div class="contents">
+        <div class="subsection">
             <h2>Foo</h2>
+        </div>
+        <div class="subsection">
             <h2>Bar</h2>
         </div>
     </section>
 
     <section data-xmb-target="primary">
         <h1 class="header--inactive">Projects</h1>
-        <div class="contents">
+        <div class="subsection">
             <h2>Foo</h2>
+        </div>
+        <div class="subsection">
             <h2>Bar</h2>
         </div>
     </section>
 
     <section data-xmb-target="primary">
         <h1 class="header--inactive">Work</h1>
-        <div class="contents">
-            <h2>Currently</h2>
-            <h2>Get in touch!</h2>
+        <div class="subsection">
+            <h2>Current</h2>
+        </div>
+        <div class="subsection">
+            <h2>Contact</h2>
         </div>
     </section>
 
     <section data-xmb-target="primary">
         <h1 class="header--inactive">About</h1>
-        <div class="contents">
+        <div class="subsection">
             <h2>Principles</h2>
+        </div>
+        <div class="subsection">
             <h2>Preferences</h2>
         </div>
     </section>

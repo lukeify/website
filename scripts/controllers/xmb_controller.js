@@ -1,9 +1,11 @@
 import {Controller} from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static targets = ['primary'];
+    static targets = ['primary', 'secondary'];
 
     primaryTargetDataAttribute = 'data-xmb-primary-active';
+    secondaryTargetDataAttribute = 'data-xmb-secondary-active';
+    secondaryBackgroundedTargetDataAttribute = 'data-xmb-secondary-backgrounded';
 
     get previousPrimaryTarget() {
         return this.activePrimaryTarget.previousElementSibling;
@@ -55,11 +57,23 @@ export default class extends Controller {
     }
 
     #zPositive() {
-
+        this.#secondaryTargets();
+        const active = this.#activeSecondaryTarget();
+        const backgrounded = this.#backgroundedSecondaryTarget();
+        active.previousElementSibling.setAttribute('data-xmb-secondary-active', '');
+        active.removeAttribute('data-xmb-secondary-active');
+        active.setAttribute('data-xmb-secondary-backgrounded', '');
+        backgrounded.removeAttribute('data-xmb-secondary-backgrounded');
     }
 
-    #zNegative() {
 
+    #zNegative() {
+        this.#activeSecondaryTarget().removeAttribute('data-xmb-secondary-active');
+        const backgrounded = this.#backgroundedSecondaryTarget();
+        const nextTarget = backgrounded.nextElementSibling;
+        backgrounded.removeAttribute('data-xmb-secondary-backgrounded');
+        backgrounded.setAttribute('data-xmb-secondary-active', '');
+        nextTarget.setAttribute('data-xmb-secondary-backgrounded', '');
     }
 
     #currentTranslation() {
@@ -78,5 +92,17 @@ export default class extends Controller {
     #setNewPrimaryTarget(newTarget) {
         this.activePrimaryTarget.removeAttribute(this.primaryTargetDataAttribute);
         newTarget.setAttribute(this.primaryTargetDataAttribute, '');
+    }
+
+    #secondaryTargets() {
+        return this.secondaryTargets.filter(st => st.parentElement === this.activePrimaryTarget);
+    }
+
+    #activeSecondaryTarget() {
+        return this.#secondaryTargets().find(st => st.hasAttribute(this.secondaryTargetDataAttribute));
+    }
+
+    #backgroundedSecondaryTarget() {
+        return this.#secondaryTargets().find(st => st.hasAttribute(this.secondaryBackgroundedTargetDataAttribute));
     }
 }
