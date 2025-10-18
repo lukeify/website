@@ -1,9 +1,12 @@
 main {
+  --x-duration: 200ms;
+  --z-duration: 500ms;
   --x-translation: 0;
   --z-translation: 0;
+
   display: flex;
   margin-block-start: 10em;
-  transition: transform 100ms ease;
+  transition: transform var(--x-duration) ease;
   transform: translateX(var(--x-translation));
 }
 
@@ -14,21 +17,27 @@ section {
   }
 }
 
-section[data-xmb-primary-active] {
+section[data-xmb-x-active] {
   h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     opacity: 1;
   }
 }
 
-[data-xmb-primary-active] {
-  .subsection {
-    --z-animation-speed: 1s;
+/* Why not simply apply `display: none;` to `.subsection`? This breaks the starting style for the transitions, causing
+ transitions from hidden to visible to not animate properly. */
+section:not([data-xmb-x-active]) .subsection {
+  display: none;
+}
 
+[data-xmb-x-active] {
+  .subsection {
+    transform-origin: 0 0;
+    pointer-events: none;
     opacity: 1;
     position: absolute;
     width: 40em;
-    transition: transform var(--z-animation-speed) ease,
+    transition: transform var(--z-duration) ease,
     filter 500ms ease-out,
     opacity 500ms ease-out;
     transition-behavior: allow-discrete;
@@ -38,47 +47,53 @@ section[data-xmb-primary-active] {
     }
   }
 
-  .subsection[data-xmb-secondary-active] {
+  .subsection[data-xmb-z-active] {
+    pointer-events: auto;
     display: block;
     opacity: 1;
     transform: perspective(100px) translate3D(0,0,0);
-    transition: transform var(--z-animation-speed) ease,
-    opacity var(--z-animation-speed) ease,
-    display var(--z-animation-speed) ease;
+    transition: transform var(--z-duration) ease,
+    opacity var(--z-duration) ease,
+    display var(--z-duration) ease;
     transition-behavior: allow-discrete;
 
     @starting-style {
-      display: block !important;
+      display: block;
     }
   }
 
-  .subsection[data-xmb-secondary-active] ~ .subsection {
+  /* All subsections that are not the immediate one beneath the active subsection should be hidden. The immediate next
+   subsection is handled using the `+` selector below. */
+  .subsection[data-xmb-z-active] ~ .subsection {
+    display: none;
+  }
+
+  .subsection[data-xmb-z-active] + .subsection {
     display: block;
-    transform: perspective(100px) translate3D(100px, -200px, -200px);
-    transition: transform var(--z-animation-speed) cubic-bezier(0,1,1,1),
+    transform: perspective(100px) translate3D(200px, -25px, -50px);
+    transition: transform var(--z-duration) cubic-bezier(0,1,1,1),
     filter 500ms ease,
     opacity 500ms ease-out,
-    display var(--z-animation-speed) ease;
+    display var(--z-duration) ease;
     transition-behavior: allow-discrete;
-    opacity: 0.4;
-    filter: blur(10px);
+    opacity: 0.2;
+    filter: blur(5px);
 
     @starting-style {
-      display: block !important;
+      display: block;
     }
   }
 
   /* Select the subsection in the z-stack that is "behind" the user's screen. */
-  .subsection:has(~ .subsection[data-xmb-secondary-active]) {
-    pointer-events: none;
+  .subsection:has(~ .subsection[data-xmb-z-active]) {
     opacity: 0;
-    transform: perspective(100px) translate3D(-400px, 300px, 0px);
-    transition: transform var(--z-animation-speed) ease, opacity var(--z-animation-speed) ease, display var(--z-animation-speed) ease;
+    transform: perspective(100px) translate3D(-200px, 25px, 50px);
+    transition: transform var(--z-duration) ease, opacity var(--z-duration) ease, display var(--z-duration) ease;
     transition-behavior: allow-discrete;
 
     @starting-style {
-      display: block !important;
-      opacity: 1;
+      display: block;
+
     }
   }
 }

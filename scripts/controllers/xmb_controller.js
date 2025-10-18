@@ -1,22 +1,21 @@
 import {Controller} from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static targets = ['primary', 'secondary'];
+    static targets = ['x', 'z'];
 
-    primaryTargetDataAttribute = 'data-xmb-primary-active';
-    secondaryTargetDataAttribute = 'data-xmb-secondary-active';
-    secondaryBackgroundedTargetDataAttribute = 'data-xmb-secondary-backgrounded';
+    xAxisTargetDataAttr = 'data-xmb-x-active';
+    zAxisTargetDataAttr = 'data-xmb-z-active';
 
-    get previousPrimaryTarget() {
-        return this.activePrimaryTarget.previousElementSibling;
+    get previousXTarget() {
+        return this.activeXTarget.previousElementSibling;
     }
 
-    get nextPrimaryTarget() {
-        return this.activePrimaryTarget.nextElementSibling;
+    get nextXTarget() {
+        return this.activeXTarget.nextElementSibling;
     }
 
-    get activePrimaryTarget() {
-        return this.primaryTargets.find(pt => pt.hasAttribute(this.primaryTargetDataAttribute));
+    get activeXTarget() {
+        return this.xTargets.find(xt => xt.hasAttribute(this.xAxisTargetDataAttr));
     }
 
     handleKeydown(event) {
@@ -37,37 +36,37 @@ export default class extends Controller {
     }
 
     #xPositive() {
-        const nextTarget = this.nextPrimaryTarget;
-        if (!nextTarget) {
+        const next = this.nextXTarget;
+        if (!next) {
             return;
         }
 
-        this.#setNewPrimaryTarget(nextTarget);
-        this.#setTranslation('x', -this.previousPrimaryTarget.getBoundingClientRect().width);
+        this.#setNewXTarget(next);
+        this.#setTranslation('x', -this.previousXTarget.getBoundingClientRect().width);
     }
 
     #xNegative() {
-        const prevTarget = this.previousPrimaryTarget;
-        if (!prevTarget) {
+        const prev = this.previousXTarget;
+        if (!prev) {
             return;
         }
 
-        this.#setTranslation('x', this.previousPrimaryTarget.getBoundingClientRect().width);
-        this.#setNewPrimaryTarget(prevTarget);
+        this.#setTranslation('x', this.previousXTarget.getBoundingClientRect().width);
+        this.#setNewXTarget(prev);
     }
 
     #zPositive() {
-        this.#secondaryTargets();
-        const active = this.#activeSecondaryTarget();
-        active.previousElementSibling.setAttribute('data-xmb-secondary-active', '');
-        active.removeAttribute('data-xmb-secondary-active');
+        this.#zTargets();
+        const active = this.#activeZTarget();
+        active.previousElementSibling.setAttribute(this.zAxisTargetDataAttr, '');
+        active.removeAttribute(this.zAxisTargetDataAttr);
     }
 
 
     #zNegative() {
-        const active = this.#activeSecondaryTarget();
-        active.nextElementSibling.setAttribute('data-xmb-secondary-active', '');
-        this.#activeSecondaryTarget().removeAttribute('data-xmb-secondary-active');
+        const active = this.#activeZTarget();
+        active.nextElementSibling.setAttribute(this.zAxisTargetDataAttr, '');
+        this.#activeZTarget().removeAttribute(this.zAxisTargetDataAttr);
     }
 
     #currentTranslation() {
@@ -83,16 +82,16 @@ export default class extends Controller {
         this.element.style.setProperty(`--${axis}-translation`, `${newValue}px`);
     }
 
-    #setNewPrimaryTarget(newTarget) {
-        this.activePrimaryTarget.removeAttribute(this.primaryTargetDataAttribute);
-        newTarget.setAttribute(this.primaryTargetDataAttribute, '');
+    #setNewXTarget(newTarget) {
+        this.activeXTarget.removeAttribute(this.xAxisTargetDataAttr);
+        newTarget.setAttribute(this.xAxisTargetDataAttr, '');
     }
 
-    #secondaryTargets() {
-        return this.secondaryTargets.filter(st => st.parentElement === this.activePrimaryTarget);
+    #zTargets() {
+        return this.zTargets.filter(zt => zt.parentElement === this.activeXTarget);
     }
 
-    #activeSecondaryTarget() {
-        return this.#secondaryTargets().find(st => st.hasAttribute(this.secondaryTargetDataAttribute));
+    #activeZTarget() {
+        return this.#zTargets().find(zt => zt.hasAttribute(this.zAxisTargetDataAttr));
     }
 }
