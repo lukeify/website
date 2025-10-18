@@ -59,21 +59,15 @@ export default class extends Controller {
     #zPositive() {
         this.#secondaryTargets();
         const active = this.#activeSecondaryTarget();
-        const backgrounded = this.#backgroundedSecondaryTarget();
         active.previousElementSibling.setAttribute('data-xmb-secondary-active', '');
         active.removeAttribute('data-xmb-secondary-active');
-        active.setAttribute('data-xmb-secondary-backgrounded', '');
-        backgrounded.removeAttribute('data-xmb-secondary-backgrounded');
     }
 
 
     #zNegative() {
+        const active = this.#activeSecondaryTarget();
+        active.nextElementSibling.setAttribute('data-xmb-secondary-active', '');
         this.#activeSecondaryTarget().removeAttribute('data-xmb-secondary-active');
-        const backgrounded = this.#backgroundedSecondaryTarget();
-        const nextTarget = backgrounded.nextElementSibling;
-        backgrounded.removeAttribute('data-xmb-secondary-backgrounded');
-        backgrounded.setAttribute('data-xmb-secondary-active', '');
-        nextTarget.setAttribute('data-xmb-secondary-backgrounded', '');
     }
 
     #currentTranslation() {
@@ -100,9 +94,5 @@ export default class extends Controller {
 
     #activeSecondaryTarget() {
         return this.#secondaryTargets().find(st => st.hasAttribute(this.secondaryTargetDataAttribute));
-    }
-
-    #backgroundedSecondaryTarget() {
-        return this.#secondaryTargets().find(st => st.hasAttribute(this.secondaryBackgroundedTargetDataAttribute));
     }
 }

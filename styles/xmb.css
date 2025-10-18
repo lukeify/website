@@ -21,28 +21,64 @@ section[data-xmb-primary-active] {
   }
 }
 
-.subsection {
-  display: none;
-  position: absolute;
-  width: 40em;
-  transition: transform 1s cubic-bezier(0.00,1.00,0.00,1.00), filter 500ms ease-out, opacity 500ms ease-out;
-}
+[data-xmb-primary-active] {
+  .subsection {
+    --z-animation-speed: 1s;
 
-.subsection[data-xmb-secondary-backgrounded] {
-  transition: transform 1000ms cubic-bezier(0.01,1.00,0.99,0.99), filter 500ms ease, opacity 500ms ease-out;
-}
+    opacity: 1;
+    position: absolute;
+    width: 40em;
+    transition: transform var(--z-animation-speed) ease,
+    filter 500ms ease-out,
+    opacity 500ms ease-out;
+    transition-behavior: allow-discrete;
 
-.subsection[data-xmb-secondary-active], .subsection[data-xmb-secondary-backgrounded] {
-  display: block;
-  transform: perspective(100px);
-}
+    @starting-style {
+      display: block;
+    }
+  }
 
-.subsection[data-xmb-secondary-backgrounded] {
-  transform: perspective(100px) translate3D(100px, -200px, -200px);
-  opacity: 0.4;
-  filter: blur(10px);
-}
+  .subsection[data-xmb-secondary-active] {
+    display: block;
+    opacity: 1;
+    transform: perspective(100px) translate3D(0,0,0);
+    transition: transform var(--z-animation-speed) ease,
+    opacity var(--z-animation-speed) ease,
+    display var(--z-animation-speed) ease;
+    transition-behavior: allow-discrete;
 
-.stack {
-  transform: perspective(100px) translateZ(0);
+    @starting-style {
+      display: block !important;
+    }
+  }
+
+  .subsection[data-xmb-secondary-active] ~ .subsection {
+    display: block;
+    transform: perspective(100px) translate3D(100px, -200px, -200px);
+    transition: transform var(--z-animation-speed) cubic-bezier(0,1,1,1),
+    filter 500ms ease,
+    opacity 500ms ease-out,
+    display var(--z-animation-speed) ease;
+    transition-behavior: allow-discrete;
+    opacity: 0.4;
+    filter: blur(10px);
+
+    @starting-style {
+      display: block !important;
+    }
+  }
+
+  /* Select the subsection in the z-stack that is "behind" the user's screen. */
+  .subsection:has(~ .subsection[data-xmb-secondary-active]) {
+    pointer-events: none;
+    opacity: 0;
+    transform: perspective(100px) translate3D(-400px, 300px, 0px);
+    transition: transform var(--z-animation-speed) ease, opacity var(--z-animation-speed) ease, display var(--z-animation-speed) ease;
+    transition-behavior: allow-discrete;
+
+    @starting-style {
+      display: block !important;
+      opacity: 1;
+    }
+  }
 }
