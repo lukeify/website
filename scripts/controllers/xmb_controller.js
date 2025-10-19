@@ -35,38 +35,70 @@ export default class extends Controller {
         }
     }
 
+    edgeBounceComplete(event) {
+        this.element.classList.remove('edge-bounce');
+    }
+
+    /**
+     * Navigates rightwards using the right arrow key.
+     */
     #xPositive() {
         const next = this.nextXTarget;
-        if (!next) {
-            return;
-        }
 
-        this.#setNewXTarget(next);
-        this.#setTranslation('x', -this.previousXTarget.getBoundingClientRect().width);
+        if (next) {
+            this.#setNewXTarget(next);
+            this.#setTranslation('x', -this.previousXTarget.getBoundingClientRect().width);
+        } else {
+            this.element.style.setProperty(`--x-edge-bounce`, `-100px`);
+            if (this.element.classList.contains('edge-bounce')) {
+                this.element.classList.remove('edge-bounce');
+                void this.element.offsetWidth;
+            }
+            this.element.classList.add('edge-bounce');
+        }
     }
 
+    /**
+     * Navigates leftwards using the left arrow key.
+     */
     #xNegative() {
         const prev = this.previousXTarget;
-        if (!prev) {
-            return;
+
+        if (prev) {
+            this.#setTranslation('x', this.previousXTarget.getBoundingClientRect().width);
+            this.#setNewXTarget(prev);
+        } else {
+            this.element.style.setProperty(`--x-edge-bounce`, `100px`);
+            if (this.element.classList.contains('edge-bounce')) {
+                this.element.classList.remove('edge-bounce');
+                void this.element.offsetWidth;
+            }
+            this.element.classList.add('edge-bounce');
         }
-
-        this.#setTranslation('x', this.previousXTarget.getBoundingClientRect().width);
-        this.#setNewXTarget(prev);
     }
 
+    /**
+     * Navigates backwards to the target behind the user's camera using the up arrow key.
+     */
     #zPositive() {
-        this.#zTargets();
         const active = this.#activeZTarget();
-        active.previousElementSibling.setAttribute(this.zAxisTargetDataAttr, '');
-        active.removeAttribute(this.zAxisTargetDataAttr);
+
+        if (active.previousElementSibling?.hasAttribute('data-xmb-target')) {
+            active.previousElementSibling.setAttribute(this.zAxisTargetDataAttr, '');
+            active.removeAttribute(this.zAxisTargetDataAttr);
+        }
     }
 
-
+    /**
+     * Navigates forwards to the next target in front of the user's camera using the down arrow key.
+     */
     #zNegative() {
         const active = this.#activeZTarget();
-        active.nextElementSibling.setAttribute(this.zAxisTargetDataAttr, '');
-        this.#activeZTarget().removeAttribute(this.zAxisTargetDataAttr);
+
+        if (active.nextElementSibling) {
+            active.nextElementSibling.setAttribute(this.zAxisTargetDataAttr, '');
+            this.#activeZTarget().removeAttribute(this.zAxisTargetDataAttr);
+        }
     }
 
     #currentTranslation() {
@@ -87,10 +119,21 @@ export default class extends Controller {
         newTarget.setAttribute(this.xAxisTargetDataAttr, '');
     }
 
+    /**
+     * Retrieve all `z` targets for the currently active `x` target.
+     *
+     * @returns {HTMLElement[]}
+     */
     #zTargets() {
         return this.zTargets.filter(zt => zt.parentElement === this.activeXTarget);
     }
 
+    /**
+     * Retrieves the currently active `z` target for the currently active `x` target. One element is always active,
+     * so this should never return `undefined`.
+     *
+     * @returns {HTMLElement}
+     */
     #activeZTarget() {
         return this.#zTargets().find(zt => zt.hasAttribute(this.zAxisTargetDataAttr));
     }

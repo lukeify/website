@@ -1,13 +1,29 @@
+@keyframes edge-bounce {
+  to, from {
+    transform: translateX(var(--x-translation));
+  }
+  50% {
+    transform: translateX(calc(var(--x-translation) + var(--x-edge-bounce)));
+  }
+}
+
 main {
   --x-duration: 200ms;
   --z-duration: 500ms;
-  --x-translation: 0;
-  --z-translation: 0;
+  --x-translation: 0px;
+  --z-translation: 0px;
+  --z-perspective: 100px;
+  --x-edge-bounce: 100px;
 
   display: flex;
   margin-block-start: 10em;
   transition: transform var(--x-duration) ease;
   transform: translateX(var(--x-translation));
+  animation-play-state: paused;
+}
+
+main.edge-bounce {
+  animation: 200ms edge-bounce ease-in-out forwards;
 }
 
 section {
@@ -25,7 +41,7 @@ section[data-xmb-x-active] {
 }
 
 /* Why not simply apply `display: none;` to `.subsection`? This breaks the starting style for the transitions, causing
- transitions from hidden to visible to not animate properly. */
+ transitions from hidden to visible to not animate properly. This could be improved by using a cascade layer. */
 section:not([data-xmb-x-active]) .subsection {
   display: none;
 }
@@ -41,25 +57,17 @@ section:not([data-xmb-x-active]) .subsection {
     filter 500ms ease-out,
     opacity 500ms ease-out;
     transition-behavior: allow-discrete;
-
-    @starting-style {
-      display: block;
-    }
   }
 
   .subsection[data-xmb-z-active] {
     pointer-events: auto;
     display: block;
     opacity: 1;
-    transform: perspective(100px) translate3D(0,0,0);
+    transform: perspective(var(--z-perspective)) translate3D(0,0,0);
     transition: transform var(--z-duration) ease,
     opacity var(--z-duration) ease,
     display var(--z-duration) ease;
     transition-behavior: allow-discrete;
-
-    @starting-style {
-      display: block;
-    }
   }
 
   /* All subsections that are not the immediate one beneath the active subsection should be hidden. The immediate next
@@ -70,7 +78,7 @@ section:not([data-xmb-x-active]) .subsection {
 
   .subsection[data-xmb-z-active] + .subsection {
     display: block;
-    transform: perspective(100px) translate3D(200px, -25px, -50px);
+    transform: perspective(var(--z-perspective)) translate3D(200px, -25px, -50px);
     transition: transform var(--z-duration) cubic-bezier(0,1,1,1),
     filter 500ms ease,
     opacity 500ms ease-out,
@@ -78,22 +86,17 @@ section:not([data-xmb-x-active]) .subsection {
     transition-behavior: allow-discrete;
     opacity: 0.2;
     filter: blur(5px);
-
-    @starting-style {
-      display: block;
-    }
   }
 
   /* Select the subsection in the z-stack that is "behind" the user's screen. */
   .subsection:has(~ .subsection[data-xmb-z-active]) {
     opacity: 0;
-    transform: perspective(100px) translate3D(-200px, 25px, 50px);
+    transform: perspective(var(--z-perspective)) translate3D(-200px, 25px, 50px);
     transition: transform var(--z-duration) ease, opacity var(--z-duration) ease, display var(--z-duration) ease;
     transition-behavior: allow-discrete;
 
     @starting-style {
       display: block;
-
     }
   }
 }
