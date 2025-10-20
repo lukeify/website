@@ -5,6 +5,9 @@ export default class extends Controller {
 
     xAxisTargetDataAttr = 'data-xmb-x-active';
     zAxisTargetDataAttr = 'data-xmb-z-active';
+    bounceClass = 'xmb--bounce';
+    zAxisBounce = 5;
+    xAxisBounce = 50;
 
     get previousXTarget() {
         return this.activeXTarget.previousElementSibling;
@@ -35,8 +38,14 @@ export default class extends Controller {
         }
     }
 
-    edgeBounceComplete(event) {
-        this.element.classList.remove('edge-bounce');
+    /**
+     * When a bounce animation is complete, signifying the end of the axis to the user when they attempted to navigate
+     * further, remove the bounce class that was added to trigger the CSS animation.
+     *
+     * @param event
+     */
+    bounceComplete(event) {
+        event.target.classList.remove(this.bounceClass);
     }
 
     /**
@@ -49,12 +58,12 @@ export default class extends Controller {
             this.#setNewXTarget(next);
             this.#setTranslation('x', -this.previousXTarget.getBoundingClientRect().width);
         } else {
-            this.element.style.setProperty(`--x-edge-bounce`, `-100px`);
-            if (this.element.classList.contains('edge-bounce')) {
-                this.element.classList.remove('edge-bounce');
+            this.element.style.setProperty(`--x-translation-bounce`, `-50px`);
+            if (this.element.classList.contains(this.bounceClass)) {
+                this.element.classList.remove(this.bounceClass);
                 void this.element.offsetWidth;
             }
-            this.element.classList.add('edge-bounce');
+            this.element.classList.add(this.bounceClass);
         }
     }
 
@@ -68,12 +77,12 @@ export default class extends Controller {
             this.#setTranslation('x', this.previousXTarget.getBoundingClientRect().width);
             this.#setNewXTarget(prev);
         } else {
-            this.element.style.setProperty(`--x-edge-bounce`, `100px`);
-            if (this.element.classList.contains('edge-bounce')) {
-                this.element.classList.remove('edge-bounce');
+            this.element.style.setProperty(`--x-translation-bounce`, `50px`);
+            if (this.element.classList.contains(this.bounceClass)) {
+                this.element.classList.remove(this.bounceClass);
                 void this.element.offsetWidth;
             }
-            this.element.classList.add('edge-bounce');
+            this.element.classList.add(this.bounceClass);
         }
     }
 
@@ -83,9 +92,17 @@ export default class extends Controller {
     #zPositive() {
         const active = this.#activeZTarget();
 
-        if (active.previousElementSibling?.hasAttribute('data-xmb-target')) {
+        if (active.previousElementSibling) {
             active.previousElementSibling.setAttribute(this.zAxisTargetDataAttr, '');
             active.removeAttribute(this.zAxisTargetDataAttr);
+        } else {
+            this.element.style.setProperty(`--z-translation-z-bounce`, `-5px`);
+            const el = this.activeXTarget.querySelector('.xmb__z-stack');
+            if (el.classList.contains(this.bounceClass)) {
+                el.classList.remove(this.bounceClass);
+                void el.offsetWidth;
+            }
+            el.classList.add(this.bounceClass);
         }
     }
 
@@ -97,7 +114,15 @@ export default class extends Controller {
 
         if (active.nextElementSibling) {
             active.nextElementSibling.setAttribute(this.zAxisTargetDataAttr, '');
-            this.#activeZTarget().removeAttribute(this.zAxisTargetDataAttr);
+            active.removeAttribute(this.zAxisTargetDataAttr);
+        } else {
+            this.element.style.setProperty(`--z-translation-z-bounce`, `5px`);
+            const el = this.activeXTarget.querySelector('.xmb__z-stack');
+            if (el.classList.contains(this.bounceClass)) {
+                el.classList.remove(this.bounceClass);
+                void el.offsetWidth;
+            }
+            el.classList.add(this.bounceClass);
         }
     }
 
@@ -125,7 +150,7 @@ export default class extends Controller {
      * @returns {HTMLElement[]}
      */
     #zTargets() {
-        return this.zTargets.filter(zt => zt.parentElement === this.activeXTarget);
+        return this.zTargets.filter(zt => this.activeXTarget.contains(zt));
     }
 
     /**
