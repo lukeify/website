@@ -1,70 +1,80 @@
 @font-face {
-    font-family: 'Neue Haas Grotesk Display Pro';
-    font-weight: 100;
-    src: local('Neue Haas Grotesk Display Pro 15 Ultra Thin'),
-    url('../typefaces/neue-haas-grotesk-display/NHaasGroteskDSPro-15UltTh.otf') format('opentype');
+  font-family: 'Neue Haas Grotesk Display Pro';
+  font-weight: 100;
+  src: local('Neue Haas Grotesk Display Pro 15 Ultra Thin'),
+  url('../typefaces/neue-haas-grotesk-display/woff2/NHaasGroteskDSPro-15UltTh.woff2') format('woff2'),
+  url('../typefaces/neue-haas-grotesk-display/otf/NHaasGroteskDSPro-15UltTh.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Neue Haas Grotesk Display Pro';
-    font-weight: 200;
-    src: local('Neue Haas Grotesk Display 25 Thin'),
-    url('../typefaces/neue-haas-grotesk-display/NHaasGroteskDSPro-25Th.otf') format('opentype');
+  font-family: 'Neue Haas Grotesk Display Pro';
+  font-weight: 200;
+  src: local('Neue Haas Grotesk Display Pro 25 Thin'),
+  url('../typefaces/neue-haas-grotesk-display/woff2/NHaasGroteskDSPro-25Th.woff2') format('woff2'),
+  url('../typefaces/neue-haas-grotesk-display/otf/NHaasGroteskDSPro-25Th.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Neue Haas Grotesk Display Pro';
-    font-weight: 250;
-    src: local('Neue Haas Grotesk Display 35 Extra Light'),
-    url('../typefaces/neue-haas-grotesk-display/NHaasGroteskDSPro-35XLt.otf') format('opentype');
+  font-family: 'Neue Haas Grotesk Display Pro';
+  font-weight: 250;
+  src: local('Neue Haas Grotesk Display Pro 35 Extra Light'),
+  url('../typefaces/neue-haas-grotesk-display/woff2/NHaasGroteskDSPro-35XLt.woff2') format('woff2'),
+  url('../typefaces/neue-haas-grotesk-display/otf/NHaasGroteskDSPro-35XLt.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Neue Haas Grotesk Display Pro';
-    font-weight: 300;
-    src: local('Neue Haas Grotesk Display 45 Light'),
-    url('../typefaces/neue-haas-grotesk-display/NHaasGroteskDSPro-45Lt.otf') format('opentype');
+  font-family: 'Neue Haas Grotesk Display Pro';
+  font-weight: 300;
+  src: local('Neue Haas Grotesk Display Pro 45 Light'),
+  url('../typefaces/neue-haas-grotesk-display/woff2/NHaasGroteskDSPro-45Lt.woff2') format('woff2'),
+  url('../typefaces/neue-haas-grotesk-display/otf/NHaasGroteskDSPro-45Lt.otf') format('opentype');
 }
 
 @font-face {
-    font-family: 'Neue Haas Grotesk Display Pro';
-    font-weight: 400;
-    src: local('Neue Haas Grotesk Display 55 Roman'),
-    url('../typefaces/neue-haas-grotesk-display/NHaasGroteskDSPro-55Rg.otf') format('opentype');
+  font-family: 'Neue Haas Grotesk Display Pro';
+  font-weight: 400;
+  src: local('Neue Haas Grotesk Display Pro 55 Roman'),
+  url('../typefaces/neue-haas-grotesk-display/woff2/NHaasGroteskDSPro-55Rg.woff2') format('woff2'),
+  url('../typefaces/neue-haas-grotesk-display/otf/NHaasGroteskDSPro-55Rg.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'Neue Haas Grotesk Display Pro';
   font-weight: 500;
-  src: local('Neue Haas Grotesk Display 65 Medium'),
-  url('../typefaces/neue-haas-grotesk-display/NHaasGroteskDSPro-65Md.otf') format('opentype');
+  src: local('Neue Haas Grotesk Display Pro 65 Medium'),
+  url('../typefaces/neue-haas-grotesk-display/woff2/NHaasGroteskDSPro-65Md.woff2') format('woff2'),
+  url('../typefaces/neue-haas-grotesk-display/otf/NHaasGroteskDSPro-65Md.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'Neue Haas Grotesk Display Pro';
   font-weight: 700;
-  src: local('Neue Haas Grotesk Display 75 Bold'),
-  url('../typefaces/neue-haas-grotesk-display/NHaasGroteskDSPro-75Bd.otf') format('opentype');
+  src: local('Neue Haas Grotesk Display Pro 75 Bold'),
+  url('../typefaces/neue-haas-grotesk-display/woff2/NHaasGroteskDSPro-75Bd.woff2') format('woff2'),
+  url('../typefaces/neue-haas-grotesk-display/otf/NHaasGroteskDSPro-75Bd.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'Neue Haas Grotesk Text Pro';
   font-weight: 400;
-  src: local('Neue Haas Grotesk Text 55 Roman'),
-  url('../typefaces/neue-haas-grotesk-text/NHaasGroteskTXPro-55Rg.otf') format('opentype');
+  src: local('Neue Haas Grotesk Text Pro 55 Roman'),
+  url('../typefaces/neue-haas-grotesk-text/woff2/NHaasGroteskTXPro-55Rg.woff2') format('woff2'),
+  url('../typefaces/neue-haas-grotesk-text/otf/NHaasGroteskTXPro-55Rg.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'Neue Haas Grotesk Text Pro';
   font-weight: 400;
   font-style: italic;
-  src: local('Neue Haas Grotesk Text 56 Italic'),
-  url('../typefaces/neue-haas-grotesk-text/NHaasGroteskTXPro-56It.otf') format('opentype');
+  src: local('Neue Haas Grotesk Text Pro 56 Italic'),
+  url('../typefaces/neue-haas-grotesk-text/woff2/NHaasGroteskTXPro-56It.woff2') format('woff2'),
+  url('../typefaces/neue-haas-grotesk-text/otf/NHaasGroteskTXPro-56It.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'Neue Haas Grotesk Text Pro';
   font-weight: 500;
-  src: local('Neue Haas Grotesk Text 65 Medium'),
-  url('../typefaces/neue-haas-grotesk-text/NHaasGroteskTXPro-65Md.otf') format('opentype');
+  src: local('Neue Haas Grotesk Text Pro 65 Medium'),
+  url('../typefaces/neue-haas-grotesk-text/woff2/NHaasGroteskTXPro-65Md.woff2') format('woff2'),
+  url('../typefaces/neue-haas-grotesk-text/otf/NHaasGroteskTXPro-65Md.otf') format('opentype');
 }
