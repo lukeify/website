@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="styles/type.css">
     <link rel="stylesheet" href="styles/variables.css">
     <link rel="stylesheet" href="styles/global.css">
-    <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/xmb.css">
     <link rel="stylesheet" href="styles/components/authenticity-sticker.css">
     <link rel="stylesheet" href="styles/components/emoji.css">
@@ -41,8 +40,8 @@
                     emojiContainerEl.prepend(nextEmojiEl);
 
                     if (emojiContainerEl.children.length > 1) {
-                        emojiContainerEl.lastChild.classList.add('emoji--transitioning-out');
-                        setTimeout(() => emojiContainerEl.lastChild.remove(), fadeOutDuration);
+                        emojiContainerEl.lastElementChild.classList.add('emoji--transitioning-out');
+                        setTimeout(() => emojiContainerEl.lastElementChild.remove(), fadeOutDuration);
                     }
                 }, transitionSpeed);
             }
@@ -105,7 +104,9 @@
         <h1>Hello!</h1>
         <div class="xmb__z-stack" data-action="animationend->xmb#bounceComplete">
             <section class="xmb__z-item" data-xmb-target="z" data-xmb-z-active>
-                <h2>👋</h2>
+                <h2 class="emoji-container">
+                    <span class="emoji">👋</span>
+                </h2>
                 <div class="xmb__z-item-container">
                     <p>This site uses an intersectional interface reminiscent of the XrossMediaBar (XMB) on the PlayStation Portable and PS3.</p>
                     <p>Navigate this site using your keyboard arrows, click the on-screen arrows with your mouse, or scroll to move through the Z-axis of the currently selected header.</p>
