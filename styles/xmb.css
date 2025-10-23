@@ -1,0 +1,135 @@
+@keyframes x-bounce {
+  to, from {
+    transform: translateX(var(--x-translation));
+  }
+  50% {
+    transform: translateX(calc(var(--x-translation) + var(--x-translation-bounce)));
+  }
+}
+
+@keyframes z-bounce {
+  to, from {
+    transform: perspective(var(--z-perspective)) translate3d(0,0,0);
+  }
+  50% {
+    transform: perspective(var(--z-perspective)) translate3d(
+      calc(var(--z-translation-z) * var(--z-translation-x-scale-factor)),
+      calc(var(--z-translation-z) * var(--z-translation-y-scale-factor)),
+      calc(var(--z-translation-z))
+    );
+  }
+}
+
+.xmb {
+  --x-duration: 200ms;
+  --x-translation: 0px;
+  --x-translation-bounce: 50px;
+
+  --z-duration: 500ms;
+  --z-translation-z-bounce: -5px;
+  --z-translation-x-scale-factor: -4;
+  --z-translation-y-scale-factor: 1/2;
+  --z-perspective: 100px;
+  --z-translation-z: var(--z-translation-z-bounce);
+
+  display: flex;
+  margin-block-start: 10em;
+  transition: transform var(--x-duration) ease;
+  transform: translateX(var(--x-translation));
+  animation-play-state: paused;
+
+  &.xmb--bounce {
+    animation: 200ms x-bounce ease-in-out forwards;
+  }
+}
+
+section {
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    opacity: 0.2;
+  }
+
+  &[data-xmb-x-active] {
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      opacity: 1;
+    }
+  }
+}
+
+/* Container for all subsections that are translated along the z-axis. `preserve-3d` ensures that child elements
+ maintain a three dimensional position relative to this element, their parent. */
+.xmb__z-stack {
+  transform: perspective(var(--z-perspective)) translate3d(0,0,0);
+  transform-style: preserve-3d;
+
+  &.xmb--bounce {
+    animation: 200ms z-bounce ease-in-out forwards;
+  }
+}
+
+/* Why not simply apply `display: none;` to `.subsection`? This breaks the starting style for the transitions, causing
+ transitions from hidden to visible to not animate properly. This could be improved by using a cascade layer. */
+.xmb__x-item:not([data-xmb-x-active]) .xmb__z-item {
+  display: none;
+}
+
+[data-xmb-x-active] {
+  .xmb__z-item {
+    transform-origin: 0 0;
+    pointer-events: none;
+    opacity: 1;
+    position: absolute;
+    width: 40em;
+    transition: transform var(--z-duration) ease, filter 500ms ease-out, opacity 500ms ease-out;
+  }
+
+  .xmb__z-item[data-xmb-z-active] {
+    pointer-events: auto;
+    display: block;
+    opacity: 1;
+    transition: transform var(--z-duration) ease, opacity var(--z-duration) ease;
+  }
+
+  /* All subsections that are not the immediate one beneath the active subsection should be hidden. The immediate next
+   subsection is handled using the `+` selector below. */
+  .xmb__z-item[data-xmb-z-active] ~ .xmb__z-item {
+    display: none;
+  }
+
+  .xmb__z-item[data-xmb-z-active] + .xmb__z-item {
+    --z-translation-z: -50px;
+    display: block;
+    transform: translate3d(
+      calc(var(--z-translation-z) * var(--z-translation-x-scale-factor)),
+      calc(var(--z-translation-z) * var(--z-translation-y-scale-factor)),
+      calc(var(--z-translation-z))
+    );
+    transition: transform var(--z-duration) cubic-bezier(0,1,1,1),
+    filter 500ms ease,
+    opacity 500ms ease-out,
+    display var(--z-duration) ease;
+    transition-behavior: allow-discrete;
+    opacity: 0.2;
+    filter: blur(5px);
+  }
+
+  /* Select the subsection in the z-stack that is "behind" the user's screen. */
+  .xmb__z-item:has(~ .xmb__z-item[data-xmb-z-active]) {
+    --z-translation-z: 50px;
+    opacity: 0;
+    transform: translate3d(
+      calc(var(--z-translation-z) * var(--z-translation-x-scale-factor)),
+      calc(var(--z-translation-z) * var(--z-translation-y-scale-factor)),
+      calc(var(--z-translation-z))
+    );
+    transition: transform var(--z-duration) ease, opacity var(--z-duration) ease, display var(--z-duration) ease;
+    transition-behavior: allow-discrete;
+
+    @starting-style {
+      display: block;
+    }
+  }
+}
+
+
