@@ -4,7 +4,7 @@
 
 html {
   min-height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 body {
@@ -24,6 +24,14 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 8em;
+  cursor: pointer;
+  transition: transform 100ms ease;
+  -webkit-user-select: none;
+  user-select: none;
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
 h2 {

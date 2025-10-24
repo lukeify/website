@@ -39,6 +39,24 @@ export default class extends Controller {
     }
 
     /**
+     * Navigate to the recently clicked header element.
+     *
+     * @param event
+     */
+    handleHeaderClick(event) {
+        const prevTarget = this.activeXTarget;
+        const xTarget = this.xTargets.find(xt => xt.contains(event.target));
+
+        if (prevTarget.compareDocumentPosition(xTarget) & Node.DOCUMENT_POSITION_FOLLOWING) {
+            this.#setNewXTarget(xTarget);
+            this.#setTranslation('x', prevTarget.getBoundingClientRect().left - xTarget.getBoundingClientRect().left);
+        } else {
+            this.#setTranslation('x', prevTarget.getBoundingClientRect().left - xTarget.getBoundingClientRect().left);
+            this.#setNewXTarget(xTarget);
+        }
+    }
+
+    /**
      * When a bounce animation is complete, signifying the end of the axis to the user when they attempted to navigate
      * further, remove the bounce class that was added to trigger the CSS animation.
      *
