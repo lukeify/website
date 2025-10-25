@@ -2,9 +2,10 @@
     box-sizing: border-box;
 }
 
-html {
-  min-height: 100%;
+html, body {
+  margin: 0;
   overflow: hidden;
+  height: 120dvh; /* TODO: Caclulate the actual height needed */
 }
 
 body {
@@ -12,8 +13,8 @@ body {
   background-color: var(--primary-bg--light-appearance);
   font: 400 1.1em var(--text-typeface);
   line-height: 1.5;
-  max-width: var(--content-width);
-  margin-inline: auto;
+  width: 100vw;
+  padding-inline: calc((100vw - var(--content-width)) / 2);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -23,6 +24,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
+  margin-block-start: 1em;
   font-size: 8em;
   cursor: pointer;
   transition: transform 100ms ease;

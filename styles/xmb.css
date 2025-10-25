@@ -33,7 +33,6 @@
   --z-translation-z: var(--z-translation-z-bounce);
 
   display: flex;
-  margin-block-start: 10em;
   transition: transform var(--x-duration) ease;
   transform: translateX(var(--x-translation));
   animation-play-state: paused;
@@ -80,7 +79,13 @@ section {
     pointer-events: none;
     opacity: 1;
     position: absolute;
-    width: 40em;
+    top:0;
+    padding-block-start: 0;
+    width: 100vw;
+    height: 100vh;
+    scrollbar-width: none;
+    overflow: scroll;
+    max-width: var(--content-width);
     transition: transform var(--z-duration) ease, filter 500ms ease-out, opacity 500ms ease-out;
   }
 

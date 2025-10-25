@@ -21,6 +21,13 @@ export default class extends Controller {
         return this.xTargets.find(xt => xt.hasAttribute(this.xAxisTargetDataAttr));
     }
 
+    /**
+     * On connection, compute the y-offset for the z-target.
+     */
+    connect() {
+        this.#computeYOffsetForZTarget(this.#activeZTarget());
+    }
+
     handleKeydown(event) {
         switch (event.key) {
             case 'ArrowUp':
@@ -113,6 +120,7 @@ export default class extends Controller {
         if (active.previousElementSibling) {
             active.previousElementSibling.setAttribute(this.zAxisTargetDataAttr, '');
             active.removeAttribute(this.zAxisTargetDataAttr);
+            this.#computeYOffsetForZTarget(this.#activeZTarget());
         } else {
             this.element.style.setProperty(`--z-translation-z-bounce`, `-5px`);
             const el = this.activeXTarget.querySelector('.xmb__z-stack');
@@ -133,6 +141,7 @@ export default class extends Controller {
         if (active.nextElementSibling) {
             active.nextElementSibling.setAttribute(this.zAxisTargetDataAttr, '');
             active.removeAttribute(this.zAxisTargetDataAttr);
+            this.#computeYOffsetForZTarget(this.#activeZTarget());
         } else {
             this.element.style.setProperty(`--z-translation-z-bounce`, `5px`);
             const el = this.activeXTarget.querySelector('.xmb__z-stack');
@@ -179,5 +188,20 @@ export default class extends Controller {
      */
     #activeZTarget() {
         return this.#zTargets().find(zt => zt.hasAttribute(this.zAxisTargetDataAttr));
+    }
+
+    /**
+     * Computes the `y` offset for the provided `z` target so it is initially in the same location as it was placed in
+     * the DOM, but allows for scrolling with the entirety of the y-axis of the viewport. This is only computed once
+     * for a `z` target, the first time it becomes active.
+     *
+     * @param target
+     */
+    #computeYOffsetForZTarget(target) {
+        if (target.style.top === '') {
+            const offset = target.getBoundingClientRect().top;
+            target.style.top = `-${offset}px`;
+            target.style.paddingBlockStart = `${offset}px`;
+        }
     }
 }
