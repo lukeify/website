@@ -42,18 +42,33 @@
   }
 }
 
-section {
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 500;
-    opacity: 0.2;
-  }
+.xmb__x-heading, .xmb__z-heading {
+  font-weight: 500;
+  color: oklch(0.8761 0 0);
+}
 
-  &[data-xmb-x-active] {
-    h1, h2, h3, h4, h5, h6 {
-      font-weight: 700;
-      opacity: 1;
-    }
-  }
+/* Apply some inline end padding as when letter-spacing is contracted, the titled */
+.xmb__x-heading {
+  padding-inline-end: 0.03em;
+}
+
+.xmb__x-item:not(:first-of-type) .xmb__x-heading {
+  margin-inline-start: -0.03em;
+}
+
+.xmb__x-heading--masked {
+  --overlap-right: 0px;
+  --overlap-left: 0px;
+  --mask-transparency: 0%;
+  mask: linear-gradient(
+    90deg,
+    oklch(0 0 0) 0%,
+    oklch(0 0 0) var(--overlap-left),
+    oklch(0 0 0 / var(--mask-transparency)) var(--overlap-left),
+    oklch(0 0 0 / var(--mask-transparency)) var(--overlap-right),
+    oklch(0 0 0) var(--overlap-right),
+    oklch(0 0 0) 110%
+  );
 }
 
 /* Container for all subsections that are translated along the z-axis. `preserve-3d` ensures that child elements
@@ -74,7 +89,13 @@ section {
 }
 
 [data-xmb-x-active] {
+  .xmb__x-heading, .xmb__z-heading {
+    font-weight: 700;
+    color: oklch(0 0 0);
+  }
+
   .xmb__z-item {
+    text-align: justify;
     transform-origin: 0 0;
     pointer-events: none;
     opacity: 1;
