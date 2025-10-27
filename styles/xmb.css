@@ -57,6 +57,7 @@
 }
 
 .xmb__x-heading--masked {
+  pointer-events: none;
   mask: linear-gradient(
     90deg,
     oklch(0 0 0) 0%,
@@ -73,10 +74,18 @@
 .xmb__z-stack {
   transform: perspective(var(--z-perspective)) translate3d(0,0,0);
   transform-style: preserve-3d;
+  position: relative;
+  z-index: -1;
 
   &.xmb--bounce {
     animation: 200ms z-bounce ease-in-out forwards;
   }
+}
+
+/* The z-index of the stack must be set beneath that of the heading elements so the heading elements remain
+clickable due to the presence of `padding-block-start` on the `.xmb__z-stack` that's applied by Javascript. */
+.xmb:not(:has(.xmb__x-heading--masked)) .xmb__z-stack {
+
 }
 
 /* Why not simply apply `display: none;` to `.subsection`? This breaks the starting style for the transitions, causing
@@ -154,5 +163,3 @@
     }
   }
 }
-
-
