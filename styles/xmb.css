@@ -57,17 +57,14 @@
 }
 
 .xmb__x-heading--masked {
-  --overlap-right: 0px;
-  --overlap-left: 0px;
-  --mask-transparency: 0%;
   mask: linear-gradient(
     90deg,
     oklch(0 0 0) 0%,
-    oklch(0 0 0) var(--overlap-left),
-    oklch(0 0 0 / var(--mask-transparency)) var(--overlap-left),
-    oklch(0 0 0 / var(--mask-transparency)) var(--overlap-right),
-    oklch(0 0 0) var(--overlap-right),
-    oklch(0 0 0) 110%
+    oklch(0 0 0) var(--overlap-left, 0px),
+    oklch(0 0 0 / var(--mask-transparency, 0%)) var(--overlap-left, 0px),
+    oklch(0 0 0 / var(--mask-transparency, 0%)) var(--overlap-right, 0px),
+    oklch(0 0 0) var(--overlap-right, 0px),
+    oklch(0 0 0) 100%
   );
 }
 
