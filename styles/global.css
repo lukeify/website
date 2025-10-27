@@ -5,7 +5,8 @@
 html, body {
   margin: 0;
   overflow: hidden;
-  height: 120dvh; /* TODO: Caclulate the actual height needed */
+  /* TODO: Calculate the actual height needed, as this causes problems on iOS Safari 26. */
+  height: 100dvh;
 }
 
 body {
