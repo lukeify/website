@@ -165,7 +165,6 @@ export default class extends Controller {
 
 
     #setXTranslation(adjustment) {
-        console.log(adjustment);
         const currTranslation = parseFloat(
             window.getComputedStyle(this.element).getPropertyValue('--x-translation')
         );
@@ -273,7 +272,6 @@ export default class extends Controller {
      * @param xTranslationAdjustment
      */
     #computeXAxisMask(zTgt, xTranslationAdjustment) {
-        console.log(xTranslationAdjustment);
         this.xHeadingTargets.forEach(h => {
             const headingRect = h.getBoundingClientRect();
             const overlap = this.#overlappingBounds(this.zItemBoundingClientRect, {
