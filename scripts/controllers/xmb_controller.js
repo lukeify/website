@@ -85,11 +85,25 @@ export default class extends Controller {
     }
 
     /**
+     * Scrolls within the currently active z-item should cause the x-axis mask on the headings to be recomputed.
      *
      * @param event
      */
-    onItemScroll(event) {
+    scrollWithinItem(event) {
         this.#computeXAxisMask(event.target, 0);
+    }
+
+    /**
+     * Because the page itself is not scrolled, but rather the z-item container is, we need to associate scroll events
+     * that occur outside this container with the z-item, and scroll the z-item accordingly.
+     *
+     * @param event
+     */
+    handleWheelOutsideItem(event) {
+        if (!this.#activeZTarget().contains(event.target)) {
+            this.#activeZTarget().scrollTop += event.deltaY;
+            this.#computeXAxisMask(event.target, 0);
+        }
     }
 
     /**
