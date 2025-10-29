@@ -1,4 +1,5 @@
 import {Controller} from "@hotwired/stimulus";
+import {asPx, overlappingBounds} from "../utils";
 
 export default class extends Controller {
     static targets = ['x', 'xHeading', 'z'];
@@ -117,7 +118,7 @@ export default class extends Controller {
             this.#setXTranslation(-this.previousXTarget.getBoundingClientRect().width);
             this.#computeXAxisMask(this.#activeZTarget(), -this.previousXTarget.getBoundingClientRect().width);
         } else {
-            this.element.style.setProperty(`--x-translation-bounce`, this.#asPx(this.xAxisBounce * -1));
+            this.element.style.setProperty(`--x-translation-bounce`, asPx(this.xAxisBounce * -1));
             if (this.element.classList.contains(this.bounceClass)) {
                 this.element.classList.remove(this.bounceClass);
                 void this.element.offsetWidth;
@@ -138,7 +139,7 @@ export default class extends Controller {
             this.#setNewTarget('x', prev);
             this.#computeXAxisMask(this.#activeZTarget(), prevWidth);
         } else {
-            this.element.style.setProperty(`--x-translation-bounce`, this.#asPx(this.xAxisBounce));
+            this.element.style.setProperty(`--x-translation-bounce`, asPx(this.xAxisBounce));
             if (this.element.classList.contains(this.bounceClass)) {
                 this.element.classList.remove(this.bounceClass);
                 void this.element.offsetWidth;
@@ -157,7 +158,7 @@ export default class extends Controller {
             this.#setNewTarget('z', active.previousElementSibling);
             this.#computeXAxisMask(this.#activeZTarget(), 0);
         } else {
-            this.element.style.setProperty(`--z-translation-z-bounce`, this.#asPx(this.zAxisBounce * -1));
+            this.element.style.setProperty(`--z-translation-z-bounce`, asPx(this.zAxisBounce * -1));
             this.#appendBounceClass();
         }
     }
@@ -172,7 +173,7 @@ export default class extends Controller {
             this.#setNewTarget('z', active.nextElementSibling);
             this.#computeXAxisMask(this.#activeZTarget(), 0);
         } else {
-            this.element.style.setProperty(`--z-translation-z-bounce`, this.#asPx(this.zAxisBounce));
+            this.element.style.setProperty(`--z-translation-z-bounce`, asPx(this.zAxisBounce));
             this.#appendBounceClass();
         }
     }
@@ -224,19 +225,9 @@ export default class extends Controller {
     #computeYOffsetForZTarget(tgt) {
         if (tgt.style.top === '') {
             const offset = tgt.getBoundingClientRect().top;
-            tgt.style.top = this.#asPx(-offset);
-            tgt.style.paddingBlockStart = this.#asPx(offset);
+            tgt.style.top = asPx(-offset);
+            tgt.style.paddingBlockStart = asPx(offset);
         }
-    }
-
-    /**
-     * Returns a value as a `pixel`-denominated string.
-     *
-     * @param value
-     * @returns {string}
-     */
-    #asPx(value) {
-        return `${value}px`;
     }
 
     /**
@@ -252,33 +243,6 @@ export default class extends Controller {
     }
 
     /**
-     * Calculates how much of the `targetRect` is overlapped by the `overlappingRect`.
-     * Returns an object with top, right, bottom, and left values indicating the overlap distances.
-     *
-     * @param overlappingRect {DOMRect} The rectangle that may be overlapping the target
-     * @param targetRect {DOMRect} The target rectangle that we want to check for overlap
-     *
-     * @returns {{top: number, right: number, bottom: number, left: number}|null} Overlap measurements, or null if no
-     * overlap is present.
-     */
-    #overlappingBounds(overlappingRect, targetRect) {
-        // Is there any overlap at all?
-        if (overlappingRect.right < targetRect.left ||
-            overlappingRect.bottom < targetRect.top ||
-            overlappingRect.left > targetRect.right ||
-            overlappingRect.top > targetRect.bottom) {
-            return null;
-        }
-
-        const left = Math.min(targetRect.width, Math.max(0, overlappingRect.left - targetRect.left));
-        const right = Math.max(0, Math.min(targetRect.width, overlappingRect.right - targetRect.left));
-        const top = Math.max(0, overlappingRect.top - targetRect.top);
-        const bottom = Math.min(targetRect.height, targetRect.bottom - Math.max(0, targetRect.bottom - overlappingRect.bottom));
-
-        return { top, right, left, bottom };
-    }
-
-    /**
      * Given a z-axis target, compute the mask that should be applied to the x-axis headings. If the z-axis target has
      * a non-zero scroll top value, then the mask should be applied to the headings.
      *
@@ -288,7 +252,7 @@ export default class extends Controller {
     #computeXAxisMask(zTgt, xTranslationAdjustment) {
         this.xHeadingTargets.forEach(h => {
             const headingRect = h.getBoundingClientRect();
-            const overlap = this.#overlappingBounds(this.zItemBoundingClientRect, {
+            const overlap = overlappingBounds(this.zItemBoundingClientRect, {
                 left: headingRect.left + xTranslationAdjustment,
                 right: headingRect.right + xTranslationAdjustment,
                 top: headingRect.top,
