@@ -7,8 +7,18 @@ export default class extends Controller {
     xAxisTargetDataAttr = 'data-xmb-x-active';
     zAxisTargetDataAttr = 'data-xmb-z-active';
     bounceClass = 'xmb--bounce';
-    zAxisBounce = 5;
-    xAxisBounce = 50;
+    bounce = {
+        x: {
+            distance: 50,
+            customProperty: '--x-translation-bounce',
+            elementFn: () => this.element
+        },
+        z: {
+            distance: 5,
+            customProperty: '--z-translation-z-bounce',
+            elementFn: () => this.activeXTarget.querySelector('.xmb__z-stack')
+        }
+    };
     zItemBoundingClientRect = null;
 
     get previousXTarget() {
@@ -118,12 +128,7 @@ export default class extends Controller {
             this.#setXTranslation(-this.previousXTarget.getBoundingClientRect().width);
             this.#computeXAxisMask(this.#activeZTarget(), -this.previousXTarget.getBoundingClientRect().width);
         } else {
-            this.element.style.setProperty(`--x-translation-bounce`, asPx(this.xAxisBounce * -1));
-            if (this.element.classList.contains(this.bounceClass)) {
-                this.element.classList.remove(this.bounceClass);
-                void this.element.offsetWidth;
-            }
-            this.element.classList.add(this.bounceClass);
+            this.#performAxisBounce('x', -1);
         }
     }
 
@@ -139,17 +144,13 @@ export default class extends Controller {
             this.#setNewTarget('x', prev);
             this.#computeXAxisMask(this.#activeZTarget(), prevWidth);
         } else {
-            this.element.style.setProperty(`--x-translation-bounce`, asPx(this.xAxisBounce));
-            if (this.element.classList.contains(this.bounceClass)) {
-                this.element.classList.remove(this.bounceClass);
-                void this.element.offsetWidth;
-            }
-            this.element.classList.add(this.bounceClass);
+            this.#performAxisBounce('x', 1);
         }
     }
 
     /**
-     * Navigates backwards to the target behind the user's camera using the up arrow key.
+     * Navigates backwards to the target behind the user's camera using the up arrow key. If there is no previous
+     * target, performs a bounce animation to signify the end of the axis to the user.
      */
     #zPositive() {
         const active = this.#activeZTarget();
@@ -158,13 +159,13 @@ export default class extends Controller {
             this.#setNewTarget('z', active.previousElementSibling);
             this.#computeXAxisMask(this.#activeZTarget(), 0);
         } else {
-            this.element.style.setProperty(`--z-translation-z-bounce`, asPx(this.zAxisBounce * -1));
-            this.#appendBounceClass();
+            this.#performAxisBounce('z', -1);
         }
     }
 
     /**
-     * Navigates forwards to the next target in front of the user's camera using the down arrow key.
+     * Navigates forwards to the next target in front of the user's camera using the down arrow key. If there is no
+     * next target, performs a bounce animation to signify the end of the axis to the user.
      */
     #zNegative() {
         const active = this.#activeZTarget();
@@ -173,17 +174,15 @@ export default class extends Controller {
             this.#setNewTarget('z', active.nextElementSibling);
             this.#computeXAxisMask(this.#activeZTarget(), 0);
         } else {
-            this.element.style.setProperty(`--z-translation-z-bounce`, asPx(this.zAxisBounce));
-            this.#appendBounceClass();
+            this.#performAxisBounce('z', 1);
         }
     }
-
 
     #setXTranslation(adjustment) {
         const currTranslation = parseFloat(
             window.getComputedStyle(this.element).getPropertyValue('--x-translation')
         );
-        this.element.style.setProperty(`--x-translation`, `${currTranslation + adjustment}px`);
+        this.element.style.setProperty(`--x-translation`, asPx(currTranslation + adjustment));
     }
 
     #setNewTarget(axis, tgt) {
@@ -231,10 +230,16 @@ export default class extends Controller {
     }
 
     /**
+     * When the end of an axis is reached, a bounce animation should be performed to signify this to the user. The
+     * parameters and properties of the bounce animation are contained within the `bounce` property of this controller.
      *
+     * @param axis
+     * @param dir
      */
-    #appendBounceClass() {
-        const el = this.activeXTarget.querySelector('.xmb__z-stack');
+    #performAxisBounce(axis, dir) {
+        this.element.style.setProperty(this.bounce[axis].customProperty, asPx(this.bounce[axis].distance * dir));
+        const el = this.bounce[axis].elementFn();
+
         if (el.classList.contains(this.bounceClass)) {
             el.classList.remove(this.bounceClass);
             void el.offsetWidth;
@@ -265,13 +270,13 @@ export default class extends Controller {
                 h.classList.add(`xmb__x-heading--masked`);
                 const maskTransparency = 100 - Math.min(100, zTgt.scrollTop);
                 h.style.setProperty(`--mask-transparency`, `${maskTransparency}%`);
-                h.style.setProperty('--overlap-left', `${overlap.left}px`);
-                h.style.setProperty('--overlap-right', `${overlap.right}px`);
+                h.style.setProperty('--overlap-left', asPx(overlap.left));
+                h.style.setProperty('--overlap-right', asPx(overlap.right));
             } else {
                 h.classList.remove(`xmb__x-heading--masked`);
                 h.style.setProperty(`--mask-transparency`, `100%`);
-                h.style.setProperty('--overlap-left', `0px`);
-                h.style.setProperty('--overlap-right', `0px`);
+                h.style.setProperty('--overlap-left', asPx(0));
+                h.style.setProperty('--overlap-right', asPx(0));
             }
         });
     }
