@@ -78,10 +78,14 @@ export default class extends Controller {
 
         if (prevTarget.compareDocumentPosition(xTarget) & Node.DOCUMENT_POSITION_FOLLOWING) {
             this.#setNewTarget('x', xTarget);
-            this.#setXTranslation(prevTarget.getBoundingClientRect().left - xTarget.getBoundingClientRect().left);
+            const translation = prevTarget.getBoundingClientRect().left - xTarget.getBoundingClientRect().left
+            this.#setXTranslation(translation);
+            this.#computeXAxisMask(this.#activeZTarget(), translation);
         } else {
-            this.#setXTranslation(prevTarget.getBoundingClientRect().left - xTarget.getBoundingClientRect().left);
+            const translation = prevTarget.getBoundingClientRect().left - xTarget.getBoundingClientRect().left;
+            this.#setXTranslation(translation);
             this.#setNewTarget('x', xTarget);
+            this.#computeXAxisMask(this.#activeZTarget(), translation);
         }
     }
 
@@ -125,8 +129,9 @@ export default class extends Controller {
 
         if (next) {
             this.#setNewTarget('x', next);
-            this.#setXTranslation(-this.previousXTarget.getBoundingClientRect().width);
-            this.#computeXAxisMask(this.#activeZTarget(), -this.previousXTarget.getBoundingClientRect().width);
+            const prevWidth = -this.previousXTarget.getBoundingClientRect().width;
+            this.#setXTranslation(prevWidth);
+            this.#computeXAxisMask(this.#activeZTarget(), prevWidth);
         } else {
             this.#performAxisBounce('x', -1);
         }
