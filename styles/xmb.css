@@ -21,10 +21,12 @@
 }
 
 .xmb {
+  /* x-axis properties */
   --x-duration: 200ms;
   --x-translation: 0px;
   --x-translation-bounce: 50px;
 
+  /* z-axis properties */
   --z-duration: 500ms;
   --z-translation-z-bounce: -5px;
   --z-translation-x-scale-factor: -4;
@@ -35,7 +37,6 @@
   display: flex;
   transition: transform var(--x-duration) ease;
   transform: translateX(var(--x-translation));
-  animation-play-state: paused;
 
   &.xmb--bounce {
     animation: 200ms x-bounce ease-in-out forwards;
@@ -43,11 +44,20 @@
 }
 
 .xmb__x-heading, .xmb__z-heading {
-  font-weight: 500;
   color: oklch(0.8761 0 0);
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 100ms ease;
+  -webkit-user-select: none;
+  user-select: none;
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
-/* Apply some inline end padding as when letter-spacing is contracted, the titled */
+/* Apply some inline end padding as when letter-spacing is contracted, the titles escape the bounding box and don't
+ have a mask properly applied. */
 .xmb__x-heading {
   padding-inline-end: 0.03em;
 }
@@ -57,7 +67,6 @@
 }
 
 .xmb__x-heading--masked {
-  pointer-events: none;
   mask: linear-gradient(
     90deg,
     oklch(0 0 0) 0%,
@@ -118,7 +127,6 @@ clickable due to the presence of `padding-block-start` on the `.xmb__z-stack` th
 
   .xmb__z-item[data-xmb-z-active] {
     pointer-events: auto;
-    display: block;
     opacity: 1;
     transition: transform var(--z-duration) ease, opacity var(--z-duration) ease;
   }
