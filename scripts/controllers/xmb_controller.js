@@ -117,7 +117,7 @@ export default class extends Controller {
     handleWheelOutsideItem(event) {
         if (!this.#activeZTarget().contains(event.target)) {
             this.#activeZTarget().scrollTop += event.deltaY;
-            this.#computeXAxisMask(event.target, 0);
+            this.#computeXAxisMask(this.#activeZTarget(), 0);
         }
     }
 
