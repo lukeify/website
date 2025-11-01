@@ -104,6 +104,17 @@ clickable due to the presence of `padding-block-start` on the `.xmb__z-stack` th
 }
 
 [data-xmb-x-active] {
+
+  &:has(.xmb__x-heading--masked) {
+    z-index: 1;
+  }
+  
+  /* Set the z-index of the headings to be  */
+  .xmb__x-heading--masked {
+    position: relative;
+    z-index: -1;
+  }
+
   .xmb__x-heading, .xmb__z-heading {
     font-weight: 700;
     color: oklch(0 0 0);

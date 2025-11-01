@@ -271,7 +271,7 @@ export default class extends Controller {
                 height: headingRect.height
             });
 
-            if (overlap) {
+            if (overlap && this.#activeZTarget().scrollTop > 0) {
                 h.classList.add(`xmb__x-heading--masked`);
                 const maskTransparency = 100 - Math.min(100, zTgt.scrollTop);
                 h.style.setProperty(`--mask-transparency`, `${maskTransparency}%`);
