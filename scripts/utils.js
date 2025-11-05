@@ -13,8 +13,10 @@ export function asPx(value) {
  * Calculates how much of the `targetRect` is overlapped by the `overlappingRect`. Returns an object with top, right,
  * bottom, and left values indicating the boundaries of the overlap relative to the `targetRect`.
  *
- * @param overlappingRect {DOMRect} The rectangle that may be overlapping the target
- * @param targetRect {DOMRect} The target rectangle that we want to check for overlap
+ * @param overlappingRect {Pick<DOMRect, 'left' | 'right' | 'top' | 'bottom' | 'width' | 'height'>} The rectangle that
+ * may be overlapping the target
+ * @param targetRect {Pick<DOMRect, 'left' | 'right' | 'top' | 'bottom' | 'width' | 'height'>} The target rectangle that
+ * we want to check for overlap.
  *
  * @returns {{top: number, right: number, bottom: number, left: number}|null} Overlap measurements, or null if no
  * overlap is present.

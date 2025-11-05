@@ -99,7 +99,7 @@
     </defs>
 </svg>
 
-<main class="xmb" data-controller="xmb" data-action="keydown@window->xmb#handleKeydown animationend->xmb#bounceComplete">
+<main class="xmb" data-controller="xmb" data-action="keydown@window->xmb#keyNavigation wheel@window->xmb#wheelOutsideItem animationend->xmb#bounceComplete">
     <section class="xmb__x-item" data-xmb-target="x" data-xmb-x-active>
         <h1 class="xmb__x-heading" data-action="click->xmb#handleHeaderClick" data-xmb-target="xHeading">Hello!</h1>
         <div class="xmb__z-stack" data-action="animationend->xmb#bounceComplete">

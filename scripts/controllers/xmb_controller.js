@@ -19,7 +19,6 @@ export default class extends Controller {
             elementFn: () => this.activeXTarget.querySelector('.xmb__z-stack')
         }
     };
-    zItemBoundingClientRect = null;
 
     get previousXTarget() {
         return this.activeXTarget.previousElementSibling;
@@ -34,15 +33,22 @@ export default class extends Controller {
     }
 
     /**
-     * On connection, compute the y-offset for the z-target, and pre-measure the boundingClientRect for the current
+     * On connection, compute the y-offset for the z-target, and pre-measure the bounding client DOMRect for the current
      * z-item before any transformations are applied.
      */
     connect() {
         this.#computeYOffsetForZTarget(this.#activeZTarget());
         this.zItemBoundingClientRect = this.#activeZTarget().getBoundingClientRect();
+        // A wrap in setTimeout ensures the mask computation occurs in the next task.
+        setTimeout(() => this.#computeXAxisMaskOverlap());
     }
 
-    handleKeydown(event) {
+    /**
+     * Support navigating the XMB via arrow keys.
+     *
+     * @param event
+     */
+    keyNavigation(event) {
         switch (event.key) {
             case 'ArrowUp':
                 event.preventDefault();
@@ -100,24 +106,24 @@ export default class extends Controller {
     }
 
     /**
-     * Scrolls within the currently active z-item should cause the x-axis mask on the headings to be recomputed.
-     *
-     * @param event
+     * Scrolls within the currently active z-item should cause the transparency of the x-axis mask to be recomputed
+     * only (and not the position of the mask itself).
      */
-    scrollWithinItem(event) {
-        this.#computeXAxisMask(this.#activeZTarget(), 0);
+    scrollWithinItem() {
+        this.#computeXAxisMaskTransparency();
     }
 
     /**
      * Because the page itself is not scrolled, but rather the z-item container is, we need to associate scroll events
-     * that occur outside this container with the z-item, and scroll the z-item accordingly.
+     * that occur outside this container with the z-item, and scroll the z-item accordingly. Once complete, we also
+     * need to recompute the x-axis mask transparency.
      *
      * @param event
      */
-    handleWheelOutsideItem(event) {
+    wheelOutsideItem(event) {
         if (!this.#activeZTarget().contains(event.target)) {
             this.#activeZTarget().scrollTop += event.deltaY;
-            this.#computeXAxisMask(this.#activeZTarget(), 0);
+            this.scrollWithinItem();
         }
     }
 
@@ -162,7 +168,7 @@ export default class extends Controller {
 
         if (active.previousElementSibling) {
             this.#setNewTarget('z', active.previousElementSibling);
-            this.#computeXAxisMask(this.#activeZTarget(), 0);
+            this.#computeXAxisMaskTransparency();
         } else {
             this.#performAxisBounce('z', -1);
         }
@@ -177,7 +183,7 @@ export default class extends Controller {
 
         if (active.nextElementSibling) {
             this.#setNewTarget('z', active.nextElementSibling);
-            this.#computeXAxisMask(this.#activeZTarget(), 0);
+            this.#computeXAxisMaskTransparency();
         } else {
             this.#performAxisBounce('z', 1);
         }
@@ -259,22 +265,12 @@ export default class extends Controller {
      * @param zTgt
      * @param xTranslationAdjustment
      */
-    #computeXAxisMask(zTgt, xTranslationAdjustment) {
+    #computeXAxisMask(zTgt, xTranslationAdjustment = 0) {
         this.xHeadingTargets.forEach(h => {
-            const headingRect = h.getBoundingClientRect();
-            const overlap = overlappingBounds(this.zItemBoundingClientRect, {
-                left: headingRect.left + xTranslationAdjustment,
-                right: headingRect.right + xTranslationAdjustment,
-                top: headingRect.top,
-                bottom: headingRect.bottom,
-                width: headingRect.width,
-                height: headingRect.height
-            });
-
-            if (overlap && this.#activeZTarget().scrollTop > 0) {
+            const overlap = this.#overlapForZItemHeading(h, xTranslationAdjustment);
+            if (overlap) {
                 h.classList.add(`xmb__x-heading--masked`);
-                const maskTransparency = 100 - Math.min(100, zTgt.scrollTop);
-                h.style.setProperty(`--mask-transparency`, `${maskTransparency}%`);
+                h.style.setProperty(`--mask-transparency`, `${100 - Math.min(100, zTgt.scrollTop)}%`);
                 h.style.setProperty('--overlap-left', asPx(overlap.left));
                 h.style.setProperty('--overlap-right', asPx(overlap.right));
             } else {
@@ -285,4 +281,47 @@ export default class extends Controller {
             }
         });
     }
+
+    #computeXAxisMaskOverlap() {
+        this.xHeadingTargets.forEach(h => {
+            const overlap = this.#overlapForZItemHeading(h);
+            if (overlap) {
+                h.classList.add(`xmb__x-heading--masked`);
+                h.style.setProperty(`--mask-transparency`, `100%`);
+                h.style.setProperty('--overlap-left', asPx(overlap.left));
+                h.style.setProperty('--overlap-right', asPx(overlap.right));
+            }
+        });
+    }
+
+    #computeXAxisMaskTransparency() {
+        if (this.#activeZTarget().scrollTop > 0) {
+            this.xHeadingTargets.forEach(h => {
+                h.classList.add(`xmb__x-heading--masked`);
+                h.style.setProperty(`--mask-transparency`, `${100 - Math.min(100, this.#activeZTarget().scrollTop)}%`);
+            });
+        } else {
+            this.xHeadingTargets.forEach(h => {
+                h.classList.remove(`xmb__x-heading--masked`);
+            });
+        }
+    }
+
+    /**
+     *
+     * @param heading
+     * @param adjustment
+     *
+     * @returns {{top: number, right: number, bottom: number, left: number}|null}
+     */
+    #overlapForZItemHeading(heading, adjustment = 0) {
+        const { left, right, top, bottom, width, height } = heading.getBoundingClientRect();
+        return overlappingBounds(
+            this.zItemBoundingClientRect,
+            { left: left + adjustment, right: right + adjustment, top, bottom, width, height }
+        );
+    }
 }
+
+// TODO: Add comments about why IntersectionObserver does not work for this use case.
+// TODO: Add comments about how x-axis navigation causes a `scroll` event to fire.
