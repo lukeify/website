@@ -40,7 +40,7 @@ export default class extends Controller {
         this.#computeYOffsetForZTarget(this.#activeZTarget());
         this.zItemBoundingClientRect = this.#activeZTarget().getBoundingClientRect();
         // A wrap in setTimeout ensures the mask computation occurs in the next task.
-        setTimeout(() => this.#computeXAxisMaskOverlap());
+        setTimeout(() => this.#computeXAxisMask(this.#activeZTarget()));
     }
 
     /**
@@ -81,18 +81,19 @@ export default class extends Controller {
     handleHeaderClick(event) {
         const prevTarget = this.activeXTarget;
         const xTarget = this.xTargets.find(xt => xt.contains(event.target));
+        let translation;
 
         if (prevTarget.compareDocumentPosition(xTarget) & Node.DOCUMENT_POSITION_FOLLOWING) {
             this.#setNewTarget('x', xTarget);
-            const translation = prevTarget.getBoundingClientRect().left - xTarget.getBoundingClientRect().left
+            translation = prevTarget.getBoundingClientRect().left - xTarget.getBoundingClientRect().left
             this.#setXTranslation(translation);
-            this.#computeXAxisMask(this.#activeZTarget(), translation);
         } else {
-            const translation = prevTarget.getBoundingClientRect().left - xTarget.getBoundingClientRect().left;
+            translation = prevTarget.getBoundingClientRect().left - xTarget.getBoundingClientRect().left;
             this.#setXTranslation(translation);
             this.#setNewTarget('x', xTarget);
-            this.#computeXAxisMask(this.#activeZTarget(), translation);
         }
+
+        this.#computeXAxisMask(this.#activeZTarget(), translation);
     }
 
     /**
@@ -262,6 +263,17 @@ export default class extends Controller {
      * Given a z-axis target, compute the mask that should be applied to the x-axis headings. If the z-axis target has
      * a non-zero scroll top value, then the mask should be applied to the headings.
      *
+     * Why do this and not use an `IntersectionObserver`? There are three main drawbacks to the `IntersectionObserver`
+     * approach:
+     *
+     * 1. Thresholds must be specified in the `IntersectionObserver` configuration for each percentage threshold that
+     * should trigger a callback, this means without an extraordinarily large number of thresholds, the mask might
+     * appear inaccurately.
+     * 2. The `IntersectionObserver` is reactive, responding to changes in intersection after they occur. This causes
+     * a visible delay in the mask effect when transitioning between x-axis items.
+     * 3. The viewport element must be a parent of the observed child elements. This isn't necessarily what we want as
+     * the "viewport" in our case should be the z-item, which is a child of a sibling of the observed elements.
+     *
      * @param zTgt
      * @param xTranslationAdjustment
      */
@@ -282,23 +294,22 @@ export default class extends Controller {
         });
     }
 
-    #computeXAxisMaskOverlap() {
-        this.xHeadingTargets.forEach(h => {
-            const overlap = this.#overlapForZItemHeading(h);
-            if (overlap) {
-                h.classList.add(`xmb__x-heading--masked`);
-                h.style.setProperty(`--mask-transparency`, `100%`);
-                h.style.setProperty('--overlap-left', asPx(overlap.left));
-                h.style.setProperty('--overlap-right', asPx(overlap.right));
-            }
-        });
-    }
-
+    /**
+     * Computes the transparency of the x-axis mask only, based on the scroll position of the currently active z-item.
+     *
+     * Although this function provides a computational speed-up for z-item navigations where the position of the mask
+     * would not need to be adjusted, it is also necessary to avoid a situation in Firefox where after an x-axis
+     * navigation, a `scroll` event is seemingly fired _after_ the key navigation. If the `scroll` handler were to use
+     * the full `#computeXAxisMask` method, the mask position would be incorrectly computed based on the previous x-axis
+     * item.
+     */
     #computeXAxisMaskTransparency() {
-        if (this.#activeZTarget().scrollTop > 0) {
+        const scrollTop = this.#activeZTarget().scrollTop;
+
+        if (scrollTop > 0) {
             this.xHeadingTargets.forEach(h => {
                 h.classList.add(`xmb__x-heading--masked`);
-                h.style.setProperty(`--mask-transparency`, `${100 - Math.min(100, this.#activeZTarget().scrollTop)}%`);
+                h.style.setProperty(`--mask-transparency`, `${100 - Math.min(100, scrollTop)}%`);
             });
         } else {
             this.xHeadingTargets.forEach(h => {
@@ -322,6 +333,3 @@ export default class extends Controller {
         );
     }
 }
-
-// TODO: Add comments about why IntersectionObserver does not work for this use case.
-// TODO: Add comments about how x-axis navigation causes a `scroll` event to fire.
