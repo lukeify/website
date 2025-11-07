@@ -46,9 +46,17 @@
 .xmb__x-item {
   --heading-adjustment: 0.03em;
 
+  z-index: 1;
+
   /* Pull the heading leftwards by the same distance that padding is added to the right-hand side. */
   &:not(:first-of-type) .xmb__x-heading {
     margin-inline-start: calc(var(--heading-adjustment) * -1);
+  }
+
+  /* When a masked heading is present, the containing `.xmb__x-item` should have a lower z-index value to ensure it
+   cannot be clicked when the z-item has been scrolled upwards. */
+  &:not([data-xmb-x-active]):has(.xmb__x-heading--masked) {
+    z-index: -1;
   }
 }
 
@@ -109,12 +117,7 @@ clickable due to the presence of `padding-block-start` on the `.xmb__z-stack` th
 }
 
 [data-xmb-x-active] {
-
-  &:has(.xmb__x-heading--masked) {
-    z-index: 1;
-  }
-  
-  /* Set the z-index of the headings to be  */
+  /* Disallow clicking of the active x-item's title when the z-item has been scrolled upwards. */
   .xmb__x-heading--masked {
     position: relative;
     z-index: -1;
