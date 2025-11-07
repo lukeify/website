@@ -315,18 +315,20 @@ export default class extends Controller {
      * item.
      */
     #computeXAxisMaskTransparency() {
-        const scrollTop = this.#activeZTarget().scrollTop;
+        window.requestAnimationFrame(() => {
+            const scrollTop = this.#activeZTarget().scrollTop;
 
-        if (scrollTop > 0) {
-            this.xHeadingTargets.forEach(h => {
-                h.classList.add(`xmb__x-heading--masked`);
-                h.style.setProperty(`--mask-transparency`, `${100 - Math.min(100, scrollTop)}%`);
-            });
-        } else {
-            this.xHeadingTargets.forEach(h => {
-                h.classList.remove(`xmb__x-heading--masked`);
-            });
-        }
+            if (scrollTop > 0) {
+                this.xHeadingTargets.forEach(h => {
+                    h.classList.add(`xmb__x-heading--masked`);
+                    h.style.setProperty(`--mask-transparency`, `${100 - Math.min(100, scrollTop)}%`);
+                });
+            } else {
+                this.xHeadingTargets.forEach(h => {
+                    h.classList.remove(`xmb__x-heading--masked`);
+                });
+            }
+        });
     }
 
     /**
