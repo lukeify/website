@@ -6,10 +6,12 @@ html, body {
   margin: 0;
   overflow: hidden;
   /* TODO: Calculate the actual height needed, as this causes problems on iOS Safari 26. */
-  height: 100dvh;
+  height: 100vh;
 }
 
 body {
+  --gutter: 0.5em;
+
   color: var(--primary-text--light-appearance);
   background-color: var(--primary-bg--light-appearance);
   font: 400 1.1em var(--text-typeface);
