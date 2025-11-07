@@ -290,7 +290,9 @@ export default class extends Controller {
         this.xHeadingTargets.forEach(h => {
             const overlap = this.#overlapForZItemHeading(h, xTranslationAdjustment);
             if (overlap) {
-                h.classList.add(`xmb__x-heading--masked`);
+                if (zTgt.scrollTop > 0) {
+                    h.classList.add(`xmb__x-heading--masked`);
+                }
                 h.style.setProperty(`--mask-transparency`, `${100 - Math.min(100, zTgt.scrollTop)}%`);
                 h.style.setProperty('--overlap-left', asPx(overlap.left));
                 h.style.setProperty('--overlap-right', asPx(overlap.right));
