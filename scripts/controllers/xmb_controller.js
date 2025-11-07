@@ -44,25 +44,34 @@ export default class extends Controller {
     }
 
     /**
-     * Support navigating the XMB via arrow keys.
+     * Support navigating the XMB via arrow keys or WASD. A modifier key or if `isComposing` is true will prevent
+     * navigation.
      *
      * @param event
      */
     keyNavigation(event) {
+        if (event.isComposing || event.shiftKey || event.ctrlKey || event.altKey || event.metaKey) {
+            return;
+        }
+
         switch (event.key) {
             case 'ArrowUp':
+            case 'w':
                 event.preventDefault();
                 this.#zPositive();
                 break;
             case 'ArrowDown':
+            case 's':
                 event.preventDefault();
                 this.#zNegative();
                 break;
             case 'ArrowRight':
+            case 'd':
                 event.preventDefault();
                 this.#xPositive();
                 break;
             case 'ArrowLeft':
+            case 'a':
                 event.preventDefault();
                 this.#xNegative();
                 break;
