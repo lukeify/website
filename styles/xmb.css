@@ -43,6 +43,15 @@
   }
 }
 
+.xmb__x-item {
+  --heading-adjustment: 0.03em;
+
+  /* Pull the heading leftwards by the same distance that padding is added to the right-hand side. */
+  &:not(:first-of-type) .xmb__x-heading {
+    margin-inline-start: calc(var(--heading-adjustment) * -1);
+  }
+}
+
 .xmb__x-heading, .xmb__z-heading {
   color: oklch(0.8761 0 0);
   cursor: pointer;
@@ -59,11 +68,7 @@
 /* Apply some inline end padding as when letter-spacing is contracted, the titles escape the bounding box and don't
  have a mask properly applied. */
 .xmb__x-heading {
-  padding-inline-end: 0.03em;
-}
-
-.xmb__x-item:not(:first-of-type) .xmb__x-heading {
-  margin-inline-start: -0.03em;
+  padding-inline-end: var(--heading-adjustment);
 }
 
 .xmb__x-heading--masked {
