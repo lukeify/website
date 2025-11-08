@@ -5,6 +5,9 @@ module.exports = {
     entry: {
         main: './index.js'
     },
+    output: {
+        filename: '[name].bundle.js',
+    },
     devServer: {
         server: 'https',
         static: {

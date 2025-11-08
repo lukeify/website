@@ -1,4 +1,4 @@
-@keyframes emoji-animation-drop-in {
+@keyframes emoji-drop-in {
     from {
         transform: translateY(-100%);
         opacity: 0;
@@ -8,27 +8,29 @@
     }
 }
 
-@keyframes emoji-animation-drop-out {
-    80% {
-        opacity: 0;
-    }
-    to {
-        opacity: 0;
-        transform: translateY(100%);
-    }
+@keyframes emoji-drop-out {
+  from {
+    position: absolute;
+    transform: translateY(0%);
+  }
+  80% {
+      opacity: 0;
+  }
+  to {
+      opacity: 0;
+      transform: translateY(100%);
+  }
 }
 
 .emoji-container {
-    /* Create a new positioning context for the emoji which require absolute positioning. */
-    position: relative;
-    left: -1.25em;
+  margin-block-end: 1.5em;
 }
 
 .emoji {
-    position: absolute;
-    animation: emoji-animation-drop-in 800ms cubic-bezier(0.6, 1.64, 0.8, 1) forwards;
+  position: absolute;
+  animation: emoji-drop-in 800ms cubic-bezier(0.6, 1.64, 0.8, 1) forwards;
 }
 
 .emoji--transitioning-out {
-    animation: emoji-animation-drop-out 1200ms cubic-bezier(0.5, 1, 0.33, 1) forwards;
+  animation: emoji-drop-out 1200ms cubic-bezier(0.5, 1, 0.33, 1) forwards;
 }
